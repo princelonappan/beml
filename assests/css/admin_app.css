@@ -1,0 +1,23 @@
+body
+{
+	font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+#ace-settings-container{
+	display:none;
+}
+.user-info {
+	top:15px;
+	max-width: 200px;
+}
+
+.user-info small {
+	font-size:95%;
+}
+
+/* .navbar .navbar-inner{
+	background-color: #0163AC;
+}
+.ace-nav > li.light-blue
+{
+	background: #01518E;
+} */

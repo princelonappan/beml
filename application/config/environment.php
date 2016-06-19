@@ -23,7 +23,7 @@ define('PRODUCTION', 'production');
 /*
  * Current environment of the application
  */
-define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : DEVELOPMENT);
+define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : PRODUCTION);
 
 
 /*

@@ -13,5 +13,5 @@
 | path to your installation.
 |
 */
-$config['base_url'] = 'http://chargeforu.com/new/';
+$config['base_url'] = 'http://52.90.2.159/';
 

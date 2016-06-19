@@ -234,7 +234,7 @@ $config['rest_ip_blacklist'] = '';
 //development
 //staging
 //production
-$config['rest_database_group'] = 'development';
+$config['rest_database_group'] = 'production';
 
 /*
 |--------------------------------------------------------------------------

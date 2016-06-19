@@ -31,7 +31,7 @@
 
 				<ul class="nav nav-list">
 					<li>
-						<a href="index.html">
+						<a href="#">
 							<i class="icon-dashboard"></i>
 							<span class="menu-text"> Dashboard </span>
 						</a>

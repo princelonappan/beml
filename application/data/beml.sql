@@ -131,6 +131,52 @@ CREATE TABLE IF NOT EXISTS `users` (
 INSERT INTO `users` (`id`, `employee_id`, `name`, `email`, `password`, `date_of_birth`, `date_of_join`, `gender`, `phone_number`, `address`, `status`, `created_date`, `modified_date`) VALUES
 (1, '1001', 'PRINCE LONAPPAN', 'test@test.com', '2077e4a6bafa9b4e7b55e1fff16818af', '2016-04-05', '2016-06-08', 1, '8787', 'KOCHI', 0, NULL, '2016-06-19');
 
+
+--
+-- Table structure for table `post_category`
+--
+
+CREATE TABLE IF NOT EXISTS `post_category` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `category_name` varchar(200) NOT NULL,
+  `status` tinyint(2) NOT NULL DEFAULT '1' COMMENT '1 - Active 2 - Inactive',
+  `created_date` date NOT NULL,
+  `modified_date` date NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+
+--
+-- Dumping data for table `post_category`
+--
+
+INSERT INTO `post_category` (`id`, `category_name`, `status`, `created_date`, `modified_date`) VALUES
+(1, 'Test', 1, '2016-06-20', '2016-06-21'),
+(2, 'NEW', 1, '2016-06-12', '2016-06-20');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `post`
+--
+
+CREATE TABLE IF NOT EXISTS `post` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) DEFAULT NULL,
+  `body` text,
+  `category_id` int(11) DEFAULT NULL,
+  `media_type` tinyint(4) DEFAULT NULL,
+  `file_path` varchar(255) DEFAULT NULL,
+  `media_url` text,
+  `is_share` tinyint(2) NOT NULL DEFAULT '1',
+  `is_comment` tinyint(2) NOT NULL DEFAULT '1',
+  `is_like` tinyint(2) NOT NULL DEFAULT '1',
+  `is_favorite` tinyint(4) NOT NULL DEFAULT '1',
+  `created_date` date NOT NULL,
+  `modified_date` date NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

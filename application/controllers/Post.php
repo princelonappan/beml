@@ -53,7 +53,7 @@ class Post extends Front_Controller
             $data['media_url'] = $media_url;
             $data['image'] = $image;
             $this->Post_model->insert_post($data);
-            $this->session->set_flashdata('message', 'This is my message');
+            $this->session->set_flashdata('message', 'Post saved');
             redirect('/post/create');
             
         }

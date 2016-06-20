@@ -514,3 +514,13 @@ function __autoload($class)
     }
  }
 }
+
+//Image configurations
+$config['upload_path']   = "./uploads";
+$config['allowed_type']  = "gif|jpg|png|jepg";
+$config['max_size']      = "5120";
+$config['max_width']     = "0";
+$config['max_height']    = "0";
+$config['remove_spaces'] = TRUE;
+$config['img_overite']   = TRUE;
+

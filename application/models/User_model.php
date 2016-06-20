@@ -53,7 +53,7 @@ Class User_model extends CI_Model
         $this->db->update('users' ,$data);
     }
     
-        public function get_user_by_id($user_id)
+    public function get_user_by_id($user_id)
     {
         $this->db->select('*');
         $this->db->from('users');

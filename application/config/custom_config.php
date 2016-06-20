@@ -6,6 +6,4 @@
  * and open the template in the editor.
  */
 
-$config['bashsms_username']= 'rhmini';
-$config['bashsms_password']= '123456';
-$config['bashsms_sender']= 'RHMINI';
+$config['pagination_limit']= '10';

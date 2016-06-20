@@ -13,6 +13,11 @@ function get_current_datetime()
     return $now->format('Y-m-d H:i:s');
 }
 
+function get_ip_address()
+{
+   return $_SERVER['REMOTE_ADDR'];
+}
+
 function rand_string($length)
 {
 

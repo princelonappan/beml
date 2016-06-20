@@ -176,7 +176,50 @@ CREATE TABLE IF NOT EXISTS `post` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
+----
+
+CREATE TABLE IF NOT EXISTS `like` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `post_id` int(10) unsigned NOT NULL,
+  `liked_by` int(10) unsigned NOT NULL,
+  `created` datetime DEFAULT NULL,
+  `ip` varchar(30) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+CREATE TABLE IF NOT EXISTS `favourite` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `post_id` int(10) unsigned NOT NULL,
+  `liked_by` int(10) unsigned NOT NULL,
+  `created` datetime DEFAULT NULL,
+  `ip` varchar(30) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+ALTER TABLE `post` ADD `like_count` INT NULL DEFAULT '0' AFTER `is_like`;
+
+ALTER TABLE `favourite` CHANGE `liked_by` `user_id` INT(10) UNSIGNED NOT NULL;
+
+
+
+--
+-- Table structure for table `post_comments`
+--
+
+CREATE TABLE IF NOT EXISTS `post_comments` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `post_id` int(11) DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `comment` text,
+  `status` tinyint(2) NOT NULL DEFAULT '0',
+  `created_date` date DEFAULT NULL,
+  `modified_date` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+ALTER TABLE `post_comments` CHANGE `modified_date` `modified_date` DATE NULL DEFAULT NULL;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+

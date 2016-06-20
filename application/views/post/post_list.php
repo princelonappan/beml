@@ -1,5 +1,58 @@
 
 
+<script type="text/javascript">
+    $(function () {
+        var oTable1 = $('#sample-table-2').dataTable({
+            "aoColumns": [
+                {"bSortable": false},
+                {"bSortable": true},
+                {"bSortable": false},
+                {"bSortable": false},
+                {"bSortable": false},
+                {"bSortable": false}
+            ]});
+
+
+        $('table th input:checkbox').on('click', function () {
+            var that = this;
+            $(this).closest('table').find('tr > td:first-child input:checkbox')
+                    .each(function () {
+                        this.checked = that.checked;
+                        $(this).closest('tr').toggleClass('selected');
+                    });
+
+        });
+
+        $('.view_post').on('click', function () {
+           console.log("Fgdfgdfg");
+           
+
+        });
+        $('[data-rel="tooltip"]').tooltip({placement: tooltip_placement});
+        function tooltip_placement(context, source) {
+            var $source = $(source);
+            var $parent = $source.closest('table')
+            var off1 = $parent.offset();
+            var w1 = $parent.width();
+
+            var off2 = $source.offset();
+            var w2 = $source.width();
+
+            if (parseInt(off2.left) < parseInt(off1.left) + parseInt(w1 / 2))
+                return 'right';
+            return 'left';
+        }
+       
+    })
+    var newwin = function()
+    {
+          console.log($(this).attr('id'));
+    }
+    $(document).on('click' , '.view_post' , function(){
+    var idProp= $(this).prop('id'); // or attr() 
+    console.log(idProp);
+});
+</script>
 <div class="main-content">
     <div class="breadcrumbs" id="breadcrumbs">
         <ul class="breadcrumb">
@@ -13,19 +66,6 @@
             </li>
             <li class="active"> Posts</li>
         </ul><!--.breadcrumb-->
-
-        <?php if (isset($studetns) && !empty($studetns))
-        {
-            ?>
-            <div class="nav-search" id="nav-search">
-                <form class="form-search" />
-                <span class="input-icon">
-                    <input type="text" placeholder="Search ..." class="input-small nav-search-input" id="nav-search-input" autocomplete="off" />
-                    <i class="icon-search nav-search-icon"></i>
-                </span>
-                </form>
-            </div><!--#nav-search-->
-<?php } ?>
     </div>
 
     <div class="page-content">
@@ -45,50 +85,37 @@
                         Manage Posts
                     </div>
                     <?php
-                    if (isset($students) && !empty($students))
+                    if (isset($posts) && !empty($posts))
                     {
                         ?>
                         <table id="sample-table-2" class="table table-striped table-bordered table-hover">
                             <thead>
                                 <tr>
-                                    <th>Student Number</th>
-                                    <th>Student Name</th>
-                                    <th>Email Address</th>
-                                    <th>Tele phone</th>
-                                    <th class="hidden-480"><i class="icon-time bigger-110 hidden-phone"></i> Date of Registration</th>
+                                    <th>Title</th>
+                                    <th>Body</th>
+                                    <th>Category</th>
+                                    <th>Created Date</th> 
                                     <th></th>
                                 </tr>
                             </thead>
 
                             <tbody>
-                                <?php
-                                foreach ($students as $student)
+                                <?php      
+                                foreach ($posts as $post)
                                 {
                                     ?>
                                     <tr>
-                                        <td><?php echo $student->id; ?></td>
-                                        <td>
-                                            <a href="#"><?php echo $student->first_name . ' ' . $student->middle_name . ' ' . $student->last_name; ?></a>
-                                        </td>
-                                        <td><?php echo $student->email; ?></td>
-                                        <td ><?php echo $student->telephone_number; ?></td>
-                                        <td ><?php echo $student->date_of_registration; ?></td>
+                                        <td><?php echo $post['title']; ?></td>                  
+                                        <td><?php echo $post['body']; ?></td>
+                                        <td><?php echo $post['category_name']; ?></td>
+                                        <td><?php echo $post['created_date']; ?></td>
 
                                         <td class="td-actions">
                                             <div class="hidden-phone visible-desktop action-buttons">
-                                                <a class="blue" href="#" data-rel="tooltip" title="View enrolled course details">
-                                                    <i class="icon-zoom-in bigger-130"></i>
-                                                </a>
-
-                                                <a class="green" href="#" data-rel="tooltip" title="Edit student details">
+                                                <a href="<?php echo '/post/post_view/' . $post['post_id']; ?>" onclick='' name='view_post' class="green view_post" id ="<?php echo $post['post_id']; ?>" data-rel="tooltip" title="View Post">
                                                     <i class="icon-pencil bigger-130"></i>
                                                 </a>
-
-                                                <a class="red" href="#" data-rel="tooltip" title="Delete student details">
-                                                    <i class="icon-trash bigger-130"></i>
-                                                </a>
                                             </div>
-
                                             <div class="hidden-desktop visible-phone">
                                                 <div class="inline position-relative">
                                                     <button class="btn btn-minier btn-yellow dropdown-toggle" data-toggle="dropdown">
@@ -97,25 +124,9 @@
 
                                                     <ul class="dropdown-menu dropdown-icon-only dropdown-yellow pull-right dropdown-caret dropdown-close">
                                                         <li>
-                                                            <a href="#" class="tooltip-info" data-rel="tooltip" title="View enrolled course details">
-                                                                <span class="blue">
-                                                                    <i class="icon-zoom-in bigger-120"></i>
-                                                                </span>
-                                                            </a>
-                                                        </li>
-
-                                                        <li>
-                                                            <a href="#" class="tooltip-success" data-rel="tooltip" title="Edit student details">
+                                                            <a href="" class="tooltip-success" data-rel="tooltip" title="View Post">
                                                                 <span class="green">
-                                                                    <i class="icon-edit bigger-120"></i>
-                                                                </span>
-                                                            </a>
-                                                        </li>
-
-                                                        <li>
-                                                            <a href="#" class="tooltip-error" data-rel="tooltip" title="Delete student details">
-                                                                <span class="red">
-                                                                    <i class="icon-trash bigger-120"></i>
+                                                                    <i name='view_post' class="view_post icon-edit bigger-120" ></i>
                                                                 </span>
                                                             </a>
                                                         </li>
@@ -144,48 +155,5 @@ else
 <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-small btn-inverse">
     <i class="icon-double-angle-up icon-only bigger-110"></i>
 </a>
-
-
-
-<script type="text/javascript">
-    $(function () {
-        var oTable1 = $('#sample-table-2').dataTable({
-            "aoColumns": [
-                {"bSortable": false},
-                {"bSortable": true},
-                {"bSortable": false},
-                {"bSortable": false},
-                {"bSortable": false},
-                {"bSortable": false}
-            ]});
-
-
-        $('table th input:checkbox').on('click', function () {
-            var that = this;
-            $(this).closest('table').find('tr > td:first-child input:checkbox')
-                    .each(function () {
-                        this.checked = that.checked;
-                        $(this).closest('tr').toggleClass('selected');
-                    });
-
-        });
-
-
-        $('[data-rel="tooltip"]').tooltip({placement: tooltip_placement});
-        function tooltip_placement(context, source) {
-            var $source = $(source);
-            var $parent = $source.closest('table')
-            var off1 = $parent.offset();
-            var w1 = $parent.width();
-
-            var off2 = $source.offset();
-            var w2 = $source.width();
-
-            if (parseInt(off2.left) < parseInt(off1.left) + parseInt(w1 / 2))
-                return 'right';
-            return 'left';
-        }
-    })
-</script>
 </body>
 </html>

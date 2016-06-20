@@ -41,7 +41,10 @@
                 
                 <form class="form-horizontal style-form" id="validation-form" method="POST" action="<?php echo $this->config->base_url(); ?>post/save_details" enctype="multipart/form-data">
                                         <div class="step-content row-fluid position-relative" id="step-container">
-                                            
+                                            <div class="alert alert-success"">
+                                             <?php $message = $this->session->flashdata('message'); 
+                                             echo $message; ?>
+                                            </div>
                                             <div class="step-pane active" id="step1">
                                                 <div class="control-group">
                                                     <label class="control-label" for="title">Title</label>

@@ -55,6 +55,32 @@
 						
 						</ul>
 					</li>
+                                        
+                                         <li>
+						<a href="/student" class="dropdown-toggle">
+							<i class="icon-user"></i>
+							<span class="menu-text">Manage Post</span>
+
+							<b class="arrow icon-angle-down"></b>
+						</a>
+
+                                            <ul class="submenu" style="display:block;">
+                                                 <li>
+								<a href="<?php echo $this->config->base_url(); ?>post">
+									<i class="icon-double-angle-right"></i>
+									Posts
+								</a>
+							</li>
+                                                        
+                                                         <li>
+								<a href="<?php echo $this->config->base_url(); ?>post/create">
+									<i class="icon-double-angle-right"></i>
+									Create Post
+								</a>
+							</li>
+						
+						</ul>
+					</li>
 																													
 				</ul><!--/.nav-list-->
 

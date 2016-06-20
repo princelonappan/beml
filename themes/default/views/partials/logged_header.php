@@ -1,5 +1,5 @@
 		<meta charset="utf-8" />
-		<title>Tables - Ace Admin</title>
+		<title>BEML</title>
 
 		<meta name="description" content="Static &amp; Dynamic Tables" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />

@@ -73,7 +73,7 @@ class User extends REST_Controller
                 {
                     $update_data['user_id'] = $user->id;
                     $this->Key_model->update_key_details($key, $update_data);
-                    $this->response(array('result_code' => 200, 'result_title' => 'Success', 'user' => $user_details));
+                    $this->response(array('result_code' => 200, 'result_title' => 'Success', 'user' => $user));
                 }
                 else
                 {

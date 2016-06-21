@@ -159,6 +159,16 @@ class Post extends REST_Controller
             $pagination_limit = $this->config->item('pagination_limit');
             $offset = $this->input->get('offset');
             $posts = $this->Post_model->get_post_by_category($category_id, $pagination_limit, $offset);
+            $post_details = format_post($posts);
+            if($post_details && !empty($post_details))
+            {
+                $this->response(array('result_code' => 200, 'result_title' => 'Success',
+                    'result_string' => 'Success', 'posts' => $post_details));
+            }
+            else
+            {
+                $this->response(array('result_code' => 400, 'result_title' => 'Error', 'result_string' => 'Please provide details for like the post.'));
+            }
         }
         else
         {

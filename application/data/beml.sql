@@ -219,6 +219,38 @@ CREATE TABLE IF NOT EXISTS `post_comments` (
 
 ALTER TABLE `post_comments` CHANGE `modified_date` `modified_date` DATE NULL DEFAULT NULL;
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `offices`
+--
+
+CREATE TABLE IF NOT EXISTS `offices` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL,
+  `address` text,
+  `contact_person_name` varchar(255) DEFAULT NULL,
+  `contact_person_number` varchar(255) DEFAULT NULL,
+  `office_image` text,
+  `created_date` date DEFAULT NULL,
+  `modified_date` date DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+
+--
+-- Dumping data for table `offices`
+--
+
+INSERT INTO `offices` (`id`, `name`, `address`, `contact_person_name`, `contact_person_number`, `office_image`, `created_date`, `modified_date`) VALUES
+(1, 'BEML Limited', 'BEML SOUDHA 23/1, 4th Main SR Nagar,Bangalore-560 027 Karnataka, India.
+', '8022963240', 'Rakesh', 'http://52.90.2.159/assests/images/logo.jpg', '2016-06-21', '2016-06-21');
+INSERT INTO `offices` (`id`, `name`, `address`, `contact_person_name`, `contact_person_number`, `office_image`, `created_date`, `modified_date`) VALUES (NULL, 'Investor Service Centre', 'BEML SOUDHA 23/1, 4th Main SR Nagar,Bangalore-560 027 Karnataka, India.', 'Rakesh', '8022963211', 'http://52.90.2.159/assests/images/logo.jpg', '2016-06-21', '2016-06-21');
+
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

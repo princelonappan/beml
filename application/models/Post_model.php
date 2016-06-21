@@ -64,13 +64,17 @@ Class Post_model extends CI_Model
         return $query->result_array();
     }
     
-    public function get_post_by_category($category_id, $pagination_limit)
+    public function get_post_by_category($category_id, $pagination_limit, $offset)
     {
-        $this->db->select('*');
+        $limit = $pagination_limit * $offset;
+        $this->db->select('*, a.id as cat_id, post.id as post_id, a.category_name as category_name, post.created_date as post_created_date');
         $this->db->from('post');
-        $this->db->where('id =', $post_id);
+        $this->db->join('post_category as a','post.category_id = a.id');
+        $this->db->where('post.category_id', $category_id);
+        $this->db->order_by("post.created_date", "desc"); 
+        $this->db->limit($pagination_limit, $limit);
         $query = $this->db->get();
-        return $query->result();
+        return $query->result_array();
     }
     
     public function update_post_details($post_id, $data)

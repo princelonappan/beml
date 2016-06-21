@@ -153,7 +153,7 @@ class Post extends REST_Controller
     
     public function get_posts_get()
     {
-        $category_id = $this->get('category_id');;
+        $category_id = $this->get('category_id');
         if (!empty($category_id))
         {
             $pagination_limit = $this->config->item('pagination_limit');
@@ -178,7 +178,7 @@ class Post extends REST_Controller
     
     public function get_post_comments_get()
     {
-        $post_id = $this->get('post_id');;
+        $post_id = $this->get('post_id');
         if (!empty($post_id))
         {
             $pagination_limit = $this->config->item('pagination_limit');
@@ -198,6 +198,31 @@ class Post extends REST_Controller
         else
         {
             $this->response(array('result_code' => 400, 'result_title' => 'Error', 'result_string' => 'Please provide details for getting the post comments'));
+        }
+    }
+    
+    public function get_favourite_posts_get()
+    {
+        $user_id = $this->get('user_id');
+        if (!empty($user_id))
+        {
+            $pagination_limit = $this->config->item('pagination_limit');
+            $offset = $this->input->get('offset');
+            $posts = $this->Favourite_model->get_favourite_posts($user_id, $pagination_limit, $offset);
+            $post_details = format_post($posts);
+            if($post_details && !empty($post_details))
+            {
+                $this->response(array('result_code' => 200, 'result_title' => 'Success',
+                    'result_string' => 'Success', 'posts' => $post_details));
+            }
+            else
+            {
+                $this->response(array('result_code' => 400, 'result_title' => 'Error', 'result_string' => 'No Posts found'));
+            }
+        }
+        else
+        {
+            $this->response(array('result_code' => 400, 'result_title' => 'Error', 'result_string' => 'Please provide details for getting the favourite post'));
         }
     }
 

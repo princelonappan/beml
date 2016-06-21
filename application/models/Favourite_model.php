@@ -30,6 +30,20 @@ Class Favourite_model extends CI_Model
             return false;
         }
     }
+    
+    public function get_favourite_posts($user_id, $pagination_limit, $offset)
+    {
+        $limit = $pagination_limit * $offset;
+        $this->db->select('*, a.id as cat_id, favourite.post_id as post_id, a.category_name as category_name, p.created_date as post_created_date');
+        $this->db->from('favourite');
+        $this->db->join('post as p','p.id = favourite.post_id');
+        $this->db->join('post_category as a','p.category_id = a.id');
+        $this->db->where('favourite.user_id', $user_id);
+        $this->db->order_by("favourite.created", "desc"); 
+        $this->db->limit($pagination_limit, $limit);
+        $query = $this->db->get();
+        return $query->result_array();
+    }
 
 }
 

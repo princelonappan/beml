@@ -246,6 +246,7 @@ INSERT INTO `offices` (`id`, `name`, `address`, `contact_person_name`, `contact_
 ', '8022963240', 'Rakesh', 'http://52.90.2.159/assests/images/logo.jpg', '2016-06-21', '2016-06-21');
 INSERT INTO `offices` (`id`, `name`, `address`, `contact_person_name`, `contact_person_number`, `office_image`, `created_date`, `modified_date`) VALUES (NULL, 'Investor Service Centre', 'BEML SOUDHA 23/1, 4th Main SR Nagar,Bangalore-560 027 Karnataka, India.', 'Rakesh', '8022963211', 'http://52.90.2.159/assests/images/logo.jpg', '2016-06-21', '2016-06-21');
 
+ALTER TABLE `post` CHANGE `media_type` `media_type` TINYINT(4) NULL DEFAULT NULL COMMENT '1 - media link 2 - image upload';
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

@@ -167,7 +167,7 @@ class Post extends REST_Controller
             }
             else
             {
-                $this->response(array('result_code' => 400, 'result_title' => 'Error', 'result_string' => 'Please provide details for like the post.'));
+                $this->response(array('result_code' => 400, 'result_title' => 'Error', 'result_string' => 'No Posts found'));
             }
         }
         else
@@ -176,6 +176,32 @@ class Post extends REST_Controller
         }
     }
     
+    public function get_post_comments_get()
+    {
+        $post_id = $this->get('post_id');;
+        if (!empty($post_id))
+        {
+            $pagination_limit = $this->config->item('pagination_limit');
+            $offset = $this->input->get('offset');
+            $post_comments = $this->Post_comments_model->get_post_comments($post_id, $pagination_limit, $offset);
+            $post_comments = format_post_comments($post_comments);
+            if($post_comments && !empty($post_comments))
+            {
+                $this->response(array('result_code' => 200, 'result_title' => 'Success',
+                    'result_string' => 'Success', 'post_comments' => $post_comments));
+            }
+            else
+            {
+                $this->response(array('result_code' => 400, 'result_title' => 'Error', 'result_string' => 'No comments found.'));
+            }
+        }
+        else
+        {
+            $this->response(array('result_code' => 400, 'result_title' => 'Error', 'result_string' => 'Please provide details for getting the post comments'));
+        }
+    }
+
+
     public function get_post_categories_get()
     {
         $categories = $this->Post_category_model->get_categories();

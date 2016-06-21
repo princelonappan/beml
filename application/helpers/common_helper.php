@@ -161,3 +161,21 @@ function format_post($posts)
     
     return $post_details;
 }
+
+function format_post_comments($comments)
+{
+    $CI = & get_instance();
+    $post_comment_details = array();
+    $i = 0;
+    foreach ($comments as $comment)
+    {
+        $post_comment_details[$i]['post_id'] = $comment['post_id'];
+        $post_comment_details[$i]['user_id'] = $comment['user_id'];
+        $post_comment_details[$i]['comment'] = $comment['comment'];
+        $post_comment_details[$i]['commented_by'] = $comment['name'];
+        $post_comment_details[$i]['created_date'] = $comment['post_commented_date'];
+        $i++;
+    }
+    
+    return $post_comment_details;
+}

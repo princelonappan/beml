@@ -7,16 +7,6 @@
 Class Post_comments_model extends CI_Model
 {
     
-    public function get_like_details($user_id, $post_id)
-    {
-        $this->db->select('*');
-        $this->db->from('like');
-        $this->db->where('liked_by =', $user_id);
-        $this->db->where('post_id =', $post_id);
-        $query = $this->db->get();
-        return $query->result();
-    }
-    
     public function save_comment($data)
     {
         try
@@ -32,11 +22,17 @@ Class Post_comments_model extends CI_Model
         }
     }
     
-    public function update_comment_details($post_id, $comment_id, $data)
+    public function get_post_comments($post_id, $pagination_limit, $offset)
     {
-        $this->db->where('id', $comment_id);
-        $this->db->where('post_id', $post_id);
-        $this->db->update('post_comments' ,$data);
+        $limit = $pagination_limit * $offset;
+        $this->db->select('*, post_comments.created_date as post_commented_date');
+        $this->db->from('post_comments');
+        $this->db->join('users as u','post_comments.user_id = u.id');
+        $this->db->where('post_comments.post_id', $post_id);
+        $this->db->order_by("post_comments.created_date", "desc"); 
+        $this->db->limit($pagination_limit, $limit);
+        $query = $this->db->get();
+        return $query->result_array();
     }
 }
 

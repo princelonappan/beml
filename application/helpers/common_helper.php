@@ -133,14 +133,16 @@ function get_logged_user_id()
         }
 }
 
-function format_post($posts)
+function format_post($posts, $user_id, $is_favourite = false)
 {
     $CI = & get_instance();
     $post_details = array();
     $i = 0;
+    $CI->load->model('Like_model');
+    $CI->load->model('Favourite_model');
     foreach ($posts as $post)
     {
-        $post_details[$i]['post_id'] = $post['post_id'];
+        $post_details[$i]['post_id'] = $post_id = $post['post_id'];
         $post_details[$i]['title'] = $post['title'];
         $post_details[$i]['body'] = $post['body'];
         $post_details[$i]['like_count'] = $post['like_count'];
@@ -153,6 +155,23 @@ function format_post($posts)
         {
             $post_details[$i]['media_url'] = $post['media_url'];
         }
+        if($is_favourite == true)
+            $post_details[$i]['is_favourited'] = 1;
+        else
+        {
+            $favourite_details = $CI->Favourite_model->get_favourite_details($user_id, $post_id);
+            if(empty($favourite_details))
+                $post_details[$i]['is_favourited'] = 0;
+            else
+                $post_details[$i]['is_favourited'] = 1;
+        }
+        
+        $like_details = $CI->Like_model->get_like_details($user_id, $post_id);
+        if(empty($like_details))
+            $post_details[$i]['is_liked'] = 0;
+        else
+            $post_details[$i]['is_liked'] = 1;
+        
         $post_details[$i]['category_id'] = $post['cat_id'];
         $post_details[$i]['category_name'] = $post['category_name'];
         $post_details[$i]['created_date'] = $post['post_created_date'];

@@ -79,6 +79,54 @@ class Post extends REST_Controller
         }
     }
 
+    public function un_like_post()
+    {
+        $post_id = $this->post('post_id');
+        $user_id = $this->post('user_id');
+        if (!empty($post_id) && !empty($user_id))
+        {
+            $data['post_id'] = $post_id;
+            $data['liked_by'] = $user_id;
+            $data['created'] = get_current_datetime();
+            $data['ip'] = get_ip_address();
+            $like_details = $this->Like_model->get_like_details($user_id, $post_id);
+            if (!empty($like_details))
+            {
+                $response = $this->Like_model->unlike_post($post_id, $user_id);
+                $post = $this->Post_model->get_post_by_id($post_id);
+                if (isset($post) && isset($post[0]))
+                {
+                    $post = $post[0];
+                    if (!empty($response) && !empty($response))
+                    {
+                        $like_count = $post->like_count;
+                        $new_count = $like_count - 1;
+                        $update_data['like_count'] = $new_count;
+                        $this->Post_model->update_post_details($post_id, $update_data);
+                        $this->response(array('result_code' => 200, 'result_title' => 'Success',
+                            'result_string' => 'Successfully updated the details'));
+                    }
+                    else
+                    {
+                        $this->response(array('result_code' => 400, 'result_title' => 'Error', 'result_string' => 'There was an issue, Please try after some time.'));
+                    }
+                }
+                else
+                {
+                    $this->response(array('result_code' => 400, 'result_title' => 'Error', 'result_string' => 'No Post details found.'));
+                }
+            }
+            else
+            {
+                $this->response(array('result_code' => 402, 'result_title' => 'Error', 'result_string' => 'Not liked.'));
+            }
+        }
+        else
+        {
+            $this->response(array('result_code' => 400, 'result_title' => 'Error', 'result_string' => 'Please provide details for like the post.'));
+        }
+    }
+    
     public function favourite_post()
     {
         $post_id = $this->post('post_id');
@@ -154,12 +202,13 @@ class Post extends REST_Controller
     public function get_posts_get()
     {
         $category_id = $this->get('category_id');
+        $user_id = $this->rest->user_id;
         if (!empty($category_id))
         {
             $pagination_limit = $this->config->item('pagination_limit');
             $offset = $this->input->get('offset');
             $posts = $this->Post_model->get_post_by_category($category_id, $pagination_limit, $offset);
-            $post_details = format_post($posts);
+            $post_details = format_post($posts, $user_id, false);
             if($post_details && !empty($post_details))
             {
                 $this->response(array('result_code' => 200, 'result_title' => 'Success',
@@ -209,7 +258,7 @@ class Post extends REST_Controller
             $pagination_limit = $this->config->item('pagination_limit');
             $offset = $this->input->get('offset');
             $posts = $this->Favourite_model->get_favourite_posts($user_id, $pagination_limit, $offset);
-            $post_details = format_post($posts);
+            $post_details = format_post($posts, $user_id, true);
             if($post_details && !empty($post_details))
             {
                 $this->response(array('result_code' => 200, 'result_title' => 'Success',

@@ -31,6 +31,21 @@ Class Like_model extends CI_Model
             return false;
         }
     }
+    
+    public function unlike_post($post_id, $user_id)
+    {
+        try
+        {
+            $this->db->where('post_id', $post_id);
+            $this->db->where('liked_by', $user_id);
+            $this->db->delete('like');
+            return true;
+            
+        } catch (Exception $exc)
+        {
+            return false;
+        }
+    }
 }
 
 ?>

@@ -126,7 +126,7 @@ class Post extends REST_Controller
             $this->response(array('result_code' => 400, 'result_title' => 'Error', 'result_string' => 'Please provide details for like the post.'));
         }
     }
-    
+
     public function favourite_post()
     {
         $post_id = $this->post('post_id');
@@ -183,14 +183,27 @@ class Post extends REST_Controller
             $data['created_date'] = get_current_datetime();
             $data['status'] = 1;
             $details = $this->Post_comments_model->save_comment($data);
-            if ($details)
+            $post = $this->Post_model->get_post_by_id($post_id);
+            if (isset($post) && isset($post[0]))
             {
-                $this->response(array('result_code' => 200, 'result_title' => 'Success',
-                    'result_string' => 'Successfully added the comment.'));
+                $post = $post[0];
+                if ($details)
+                {
+                    $comment_count = $post->comment_count;
+                    $new_count = $comment_count + 1;
+                    $update_data['comment_count'] = $new_count;
+                    $this->Post_model->update_post_details($post_id, $update_data);
+                    $this->response(array('result_code' => 200, 'result_title' => 'Success',
+                        'result_string' => 'Successfully added the comment.'));
+                }
+                else
+                {
+                    $this->response(array('result_code' => 400, 'result_title' => 'Error', 'result_string' => 'There was an issue, Please try after some time.'));
+                }
             }
             else
             {
-                $this->response(array('result_code' => 400, 'result_title' => 'Error', 'result_string' => 'There was an issue, Please try after some time.'));
+                $this->response(array('result_code' => 400, 'result_title' => 'Error', 'result_string' => 'No Post details found.'));
             }
         }
         else
@@ -198,7 +211,7 @@ class Post extends REST_Controller
             $this->response(array('result_code' => 400, 'result_title' => 'Error', 'result_string' => 'Please provide details for like the post.'));
         }
     }
-    
+
     public function get_posts_get()
     {
         $category_id = $this->get('category_id');
@@ -209,7 +222,7 @@ class Post extends REST_Controller
             $offset = $this->input->get('offset');
             $posts = $this->Post_model->get_post_by_category($category_id, $pagination_limit, $offset);
             $post_details = format_post($posts, $user_id, false);
-            if($post_details && !empty($post_details))
+            if ($post_details && !empty($post_details))
             {
                 $this->response(array('result_code' => 200, 'result_title' => 'Success',
                     'result_string' => 'Success', 'posts' => $post_details));
@@ -224,7 +237,7 @@ class Post extends REST_Controller
             $this->response(array('result_code' => 400, 'result_title' => 'Error', 'result_string' => 'Please provide details for getting the posts.'));
         }
     }
-    
+
     public function get_post_comments_get()
     {
         $post_id = $this->get('post_id');
@@ -234,7 +247,7 @@ class Post extends REST_Controller
             $offset = $this->input->get('offset');
             $post_comments = $this->Post_comments_model->get_post_comments($post_id, $pagination_limit, $offset);
             $post_comments = format_post_comments($post_comments);
-            if($post_comments && !empty($post_comments))
+            if ($post_comments && !empty($post_comments))
             {
                 $this->response(array('result_code' => 200, 'result_title' => 'Success',
                     'result_string' => 'Success', 'post_comments' => $post_comments));
@@ -249,7 +262,7 @@ class Post extends REST_Controller
             $this->response(array('result_code' => 400, 'result_title' => 'Error', 'result_string' => 'Please provide details for getting the post comments'));
         }
     }
-    
+
     public function get_favourite_posts_get()
     {
         $user_id = $this->get('user_id');
@@ -259,7 +272,7 @@ class Post extends REST_Controller
             $offset = $this->input->get('offset');
             $posts = $this->Favourite_model->get_favourite_posts($user_id, $pagination_limit, $offset);
             $post_details = format_post($posts, $user_id, true);
-            if($post_details && !empty($post_details))
+            if ($post_details && !empty($post_details))
             {
                 $this->response(array('result_code' => 200, 'result_title' => 'Success',
                     'result_string' => 'Success', 'posts' => $post_details));
@@ -275,14 +288,13 @@ class Post extends REST_Controller
         }
     }
 
-
     public function get_post_categories_get()
     {
         $categories = $this->Post_category_model->get_categories();
-        if($categories && !empty($categories))
+        if ($categories && !empty($categories))
         {
-             $this->response(array('result_code' => 200, 'result_title' => 'Success',
-                    'categories' => $categories));
+            $this->response(array('result_code' => 200, 'result_title' => 'Success',
+                'categories' => $categories));
         }
         else
         {

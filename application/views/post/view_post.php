@@ -75,7 +75,8 @@
                                                     <label class="control-label" for="media_url">Media URL :</label>
                                                     <div class="controls">
                                                         <div class="span12" style='line-height: 31px;'>
-                                                          <?php if(isset($post[0]['file_path']) && $post[0]['file_path'] != NULL && $post[0]['file_path'] = ''){?> 
+                                                          <?php
+                                                          if(isset($post[0]['file_path']) && $post[0]['file_path'] != NULL){?> 
                                                           <a href="<?php echo $this->config->base_url(); ?>uploads/<?php echo $post[0]['file_path'];?>">Link
                                                           </a> 
                                                           <?php }else{?>

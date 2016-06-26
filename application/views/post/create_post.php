@@ -90,11 +90,26 @@
                                                         <span class="span12">
                                                             <label class="blue" style="display: inline;">
                                                                 <input name="media_type" value="1" type="radio" checked="checked"/>
-                                                                <span class="lbl">Upload media link</span>
+                                                                <span class="lbl">Upload Image link</span>
+                                                            </label>
+                                                            
+                                                             <label class="blue" style="display: inline;">
+                                                                <input name="media_type" value="2" type="radio" checked="checked"/>
+                                                                <span class="lbl">Upload PDF link</span>
+                                                            </label>
+                                                            
+                                                            <label class="blue" style="display: inline;">
+                                                                <input name="media_type" value="3" type="radio" checked="checked"/>
+                                                                <span class="lbl">Upload Website link</span>
+                                                            </label>
+                                                            
+                                                             <label class="blue" style="display: inline;">
+                                                                <input name="media_type" value="4" type="radio" checked="checked"/>
+                                                                <span class="lbl">Upload Video link</span>
                                                             </label>
 
                                                             <label class="blue" style="display: inline;padding-left: 5px;">
-                                                                <input name="media_type" value="2" type="radio" />
+                                                                <input name="media_type" value="5" type="radio" />
                                                                 <span class="lbl">Upload a image </span>
                                                             </label>
                                                         </span>
@@ -168,13 +183,13 @@
     $(function () {
         
         var media_type_value = $('input[type=radio][name=media_type]').val();
-        if (media_type_value == '1') {
-            $("#media_url_upload_link").show();
-            $("#image_upload_div").hide();
-        }
-        else {
+        if (media_type_value == '5') {
             $("#media_url_upload_link").hide();
             $("#image_upload_div").show();
+        }
+        else {
+            $("#media_url_upload_link").show();
+            $("#image_upload_div").hide();
         }
         $("#course_save").click(function () {
             if($('#validation-form').valid())
@@ -185,13 +200,13 @@
         });
         
     $('input[type=radio][name=media_type]').change(function() {
-        if (this.value == '1') {
-            $("#media_url_upload_link").show();
-            $("#image_upload_div").hide();
-        }
-        else {
+         if (this.value == '5') {
             $("#media_url_upload_link").hide();
             $("#image_upload_div").show();
+        }
+        else {
+            $("#media_url_upload_link").show();
+            $("#image_upload_div").hide();
         }
     });
         

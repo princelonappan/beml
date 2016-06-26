@@ -248,6 +248,8 @@ INSERT INTO `offices` (`id`, `name`, `address`, `contact_person_name`, `contact_
 
 ALTER TABLE `post` CHANGE `media_type` `media_type` TINYINT(4) NULL DEFAULT NULL COMMENT '1 - media link 2 - image upload';
 
+ALTER TABLE `post` CHANGE `media_type` `media_type` TINYINT(4) NULL DEFAULT NULL COMMENT '1 - image link 2 - PDF link 3 - Website Link 4 - Video Link';
+ALTER TABLE `post` ADD `comment_count` INT NULL DEFAULT '0' AFTER `like_count`;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

@@ -147,13 +147,15 @@ function format_post($posts, $user_id, $is_favourite = false)
         $post_details[$i]['body'] = $post['body'];
         $post_details[$i]['like_count'] = $post['like_count'];
         $post_details[$i]['is_share'] = $post['is_share'];
-        if($post['media_type'] && $post['media_type'] == 2)
+        if($post['media_type'] && $post['media_type'] == 5)
         {
             $post_details[$i]['media_url'] = $CI->config->base_url().'uploads/'.$post['file_path'];
+            $post_details[$i]['media_type'] = 1;
         }
         else
         {
             $post_details[$i]['media_url'] = $post['media_url'];
+            $post_details[$i]['media_type'] = $post['media_type'];
         }
         if($is_favourite == true)
             $post_details[$i]['is_favourited'] = 1;
@@ -172,6 +174,7 @@ function format_post($posts, $user_id, $is_favourite = false)
         else
             $post_details[$i]['is_liked'] = 1;
         
+        $post_details[$i]['comment_count'] = $post['comment_count'];
         $post_details[$i]['category_id'] = $post['cat_id'];
         $post_details[$i]['category_name'] = $post['category_name'];
         $post_details[$i]['created_date'] = $post['post_created_date'];

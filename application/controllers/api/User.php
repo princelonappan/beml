@@ -40,11 +40,20 @@ class User extends REST_Controller
             {
                 $user_details = $user_details[0];
                 $user_id = $user_details->id;
-                $key = $this->rest->key;
-                $update_data['user_id'] = $user_id;
-                $this->Key_model->update_key_details($key, $update_data);
-                $this->response(array('result_code' => 200, 'result_title' => 'Success',
-                    'result_string' => 'Success', 'user' => $user_details));
+                $is_registered = $user_details->is_registered;
+                if ($is_registered == 1)
+                {
+                    $this->response(array('result_code' => 202, 'result_title' => 'Error',
+                        'result_string' => 'Already a user'));
+                }
+                else
+                {
+                    $key = $this->rest->key;
+                    $update_data['user_id'] = $user_id;
+                    $this->Key_model->update_key_details($key, $update_data);
+                    $this->response(array('result_code' => 200, 'result_title' => 'Success',
+                        'result_string' => 'Success', 'user' => $user_details));
+                }
             }
             else
             {
@@ -183,27 +192,20 @@ class User extends REST_Controller
         if (!empty($user_id))
         {
             $name = $this->post('name');
-            $email = $this->post('email');
-            $gender = $this->post('gender');
-            $address = $this->post('address');
-            $phone_number = $this->post('phone_number');
             $password = $this->post('password');
             $confirm_password = $this->post('confirm_password');
 
             $user_data = $user_details = array();
             $current_time = get_current_datetime();
-            if (!empty($name) && !empty($address) && !empty($gender) && !empty($password) && !empty($confirm_password) && !empty($phone_number))
+            if (!empty($name) && !empty($confirm_password))
             {
                 if ($password == $confirm_password)
                 {
                     $user_details = array(
                         'name' => $name,
-                        'email' => $email,
-                        'address' => $address,
-                        'gender' => $gender,
                         'password' => md5($password),
-                        'phone_number' => $phone_number,
-                        'modified_date' => $current_time
+                        'modified_date' => $current_time,
+                        'is_registered' => 1
                     );
 
                     $user_details = $this->User_model->update_users_details($user_id, $user_details);

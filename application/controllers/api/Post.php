@@ -126,6 +126,45 @@ class Post extends REST_Controller
             $this->response(array('result_code' => 400, 'result_title' => 'Error', 'result_string' => 'Please provide details for like the post.'));
         }
     }
+    
+    public function un_favourite_post()
+    {
+        $post_id = $this->post('post_id');
+        $user_id = $this->post('user_id');
+        if (!empty($post_id) && !empty($user_id))
+        {
+            $favourite_details = $this->Favourite_model->get_favourite_details($user_id, $post_id);
+            if (!empty($favourite_details))
+            {
+                $response = $this->Favourite_model->un_favourite_post($post_id, $user_id);
+                $post = $this->Post_model->get_post_by_id($post_id);
+                if (isset($post) && isset($post[0]))
+                {
+                    if (!empty($response) && !empty($response))
+                    {
+                        $this->response(array('result_code' => 200, 'result_title' => 'Success',
+                            'result_string' => 'Successfully updated the details'));
+                    }
+                    else
+                    {
+                        $this->response(array('result_code' => 400, 'result_title' => 'Error', 'result_string' => 'There was an issue, Please try after some time.'));
+                    }
+                }
+                else
+                {
+                    $this->response(array('result_code' => 400, 'result_title' => 'Error', 'result_string' => 'No Post details found.'));
+                }
+            }
+            else
+            {
+                $this->response(array('result_code' => 402, 'result_title' => 'Error', 'result_string' => 'Already updated the details.'));
+            }
+        }
+        else
+        {
+            $this->response(array('result_code' => 400, 'result_title' => 'Error', 'result_string' => 'Please provide details for like the post.'));
+        }
+    }
 
     public function favourite_post()
     {

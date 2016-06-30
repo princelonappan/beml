@@ -44,6 +44,21 @@ Class Favourite_model extends CI_Model
         $query = $this->db->get();
         return $query->result_array();
     }
+    
+    public function un_favourite_post($post_id, $user_id)
+    {
+        try
+        {
+            $this->db->where('post_id', $post_id);
+            $this->db->where('user_id', $user_id);
+            $this->db->delete('favourite');
+            return true;
+            
+        } catch (Exception $exc)
+        {
+            return false;
+        }
+    }
 
 }
 

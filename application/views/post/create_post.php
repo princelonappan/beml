@@ -110,6 +110,11 @@
 
                                                             <label class="blue" style="display: inline;padding-left: 5px;">
                                                                 <input name="media_type" value="5" type="radio" />
+                                                                <span class="lbl">Upload a YouTube Link</span>
+                                                            </label>
+                                                            
+                                                            <label class="blue" style="display: inline;padding-left: 5px;">
+                                                                <input name="media_type" value="6" type="radio" />
                                                                 <span class="lbl">Upload a image </span>
                                                             </label>
                                                         </span>
@@ -183,7 +188,7 @@
     $(function () {
         
         var media_type_value = $('input[type=radio][name=media_type]').val();
-        if (media_type_value == '5') {
+        if (media_type_value == '6') {
             $("#media_url_upload_link").hide();
             $("#image_upload_div").show();
         }
@@ -200,7 +205,7 @@
         });
         
     $('input[type=radio][name=media_type]').change(function() {
-         if (this.value == '5') {
+         if (this.value == '6') {
             $("#media_url_upload_link").hide();
             $("#image_upload_div").show();
         }

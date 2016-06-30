@@ -271,6 +271,11 @@ UPDATE `offices` SET `fax` = '+91 80 22963278' WHERE `offices`.`id` = 2;
 UPDATE `offices` SET `office_type` = 'Corporate Office' WHERE `offices`.`id` = 1;
 
 UPDATE `offices` SET `office_type` = 'Investor Service Centre Office' WHERE `offices`.`id` = 2;
+
+
+update POST set media_type = 6 where media_type = 5;
+ALTER TABLE `post` CHANGE `media_type` `media_type` TINYINT(4) NULL DEFAULT NULL COMMENT '1 - image link 2 - PDF link 3 - Website Link 4 - Video Link 5 - Youtube Link';
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

@@ -147,7 +147,7 @@ function format_post($posts, $user_id, $is_favourite = false)
         $post_details[$i]['body'] = $post['body'];
         $post_details[$i]['like_count'] = $post['like_count'];
         $post_details[$i]['is_share'] = $post['is_share'];
-        if($post['media_type'] && $post['media_type'] == 5)
+        if($post['media_type'] && $post['media_type'] == 6)
         {
             $post_details[$i]['media_url'] = $CI->config->base_url().'uploads/'.$post['file_path'];
             $post_details[$i]['media_type'] = 1;

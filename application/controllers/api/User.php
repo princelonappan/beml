@@ -51,6 +51,13 @@ class User extends REST_Controller
                     $key = $this->rest->key;
                     $update_data['user_id'] = $user_id;
                     $this->Key_model->update_key_details($key, $update_data);
+                    if ($user_details->user_profile_image && !empty($user_details->user_profile_image))
+                    {
+                        $user_details->user_profile_image = base_url() . 'uploads/user_profile_images/' . $user_details->user_profile_image;
+                    }
+                    else
+                        unset($user_details->user_profile_image);
+
                     $this->response(array('result_code' => 200, 'result_title' => 'Success',
                         'result_string' => 'Success', 'user' => $user_details));
                 }
@@ -82,6 +89,14 @@ class User extends REST_Controller
                 {
                     $update_data['user_id'] = $user->id;
                     $this->Key_model->update_key_details($key, $update_data);
+
+                    if ($user->user_profile_image && !empty($user->user_profile_image))
+                    {
+                        $user->user_profile_image = base_url() . 'uploads/user_profile_images/' . $user->user_profile_image;
+                    }
+                    else
+                        unset($user->user_profile_image);
+
                     $this->response(array('result_code' => 200, 'result_title' => 'Success', 'user' => $user));
                 }
                 else
@@ -198,7 +213,14 @@ class User extends REST_Controller
 
                     $user_details = $this->User_model->update_users_details($user_id, $user_details);
                     $user = $this->User_model->get_user_by_id($user_id);
-                    $this->response(array('result_code' => 200, 'result_title' => 'Success', 'user' => $user[0], 'result_string' => 'Successfully updated the user details.'));
+                    $user = $user[0];
+                    if ($user->user_profile_image && !empty($user->user_profile_image))
+                    {
+                        $user->user_profile_image = base_url() . 'uploads/user_profile_images/' . $user->user_profile_image;
+                    }
+                    else
+                        unset($user->user_profile_image);
+                    $this->response(array('result_code' => 200, 'result_title' => 'Success', 'user' => $user, 'result_string' => 'Successfully updated the user details.'));
                 }
                 else
                 {
@@ -208,6 +230,45 @@ class User extends REST_Controller
             else
             {
                 $this->response(array('result_code' => 400, 'result_title' => 'Error', 'result_string' => 'Please provide user details.'));
+            }
+        }
+        else
+        {
+            $this->response(array('result_code' => 400, 'result_title' => 'Error', 'result_string' => 'Please provide user id.'));
+        }
+    }
+
+    public function upload_user_image_post()
+    {
+        $key = $this->rest->key;
+        if (!empty($key) && isset($this->rest->user_id) && !empty($this->rest->user_id) && isset($_FILES['user_image']))
+        {
+            $user_id = $this->rest->user_id;
+            $path = $_FILES['user_image']['name'];
+            $ext = pathinfo($path, PATHINFO_EXTENSION);
+            $uploaddir = './uploads/user_profile_images/';
+            $user_img = time() . rand() . '.' . $ext;
+            $uploadfile = $uploaddir . $user_img;
+
+            if (move_uploaded_file($_FILES['user_image']['tmp_name'], $uploadfile))
+            {
+                $user_details = array(
+                    'user_profile_image' => $user_img
+                );
+                $user_details = $this->User_model->update_users_details($user_id, $user_details);
+                $user = $this->User_model->get_user_by_id($user_id);
+                $user = $user[0];
+                if ($user->user_profile_image && !empty($user->user_profile_image))
+                {
+                    $user->user_profile_image = base_url() . 'uploads/user_profile_images/' . $user->user_profile_image;
+                }
+                else
+                    unset($user->user_profile_image);
+                $this->response(array('result_code' => 200, 'result_title' => 'Success', 'user' => $user, 'result_string' => 'Successfully updated the user details.'));
+            }
+            else
+            {
+                $this->response(array('result_code' => 400, 'result_title' => 'Error', 'result_string' => 'There was an issue while uploading the image.'));
             }
         }
         else

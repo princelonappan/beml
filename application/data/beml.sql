@@ -273,8 +273,9 @@ UPDATE `offices` SET `office_type` = 'Corporate Office' WHERE `offices`.`id` = 1
 UPDATE `offices` SET `office_type` = 'Investor Service Centre Office' WHERE `offices`.`id` = 2;
 
 
-update POST set media_type = 6 where media_type = 5;
+update post set media_type = 6 where media_type = 5;
 ALTER TABLE `post` CHANGE `media_type` `media_type` TINYINT(4) NULL DEFAULT NULL COMMENT '1 - image link 2 - PDF link 3 - Website Link 4 - Video Link 5 - Youtube Link';
+ALTER TABLE `users` ADD `user_profile_image` VARCHAR(200) NULL AFTER `date_of_join`;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

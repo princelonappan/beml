@@ -33,7 +33,7 @@ class Office extends REST_Controller
         if($offices && !empty($offices))
         {
              $this->response(array('result_code' => 200, 'result_title' => 'Success',
-                    'categories' => $offices));
+                    'offices' => $offices));
         }
         else
         {

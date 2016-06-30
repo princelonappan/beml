@@ -258,6 +258,19 @@ ALTER TABLE `users`
   DROP `phone_number`,
   DROP `address`;
 ALTER TABLE `users` ADD `is_registered` TINYINT NOT NULL DEFAULT '0' COMMENT '0 - No 1 - Yes' AFTER `date_of_join`;
+
+ALTER TABLE `offices` ADD `office_type` VARCHAR(200) NULL AFTER `id`;
+ALTER TABLE `offices` ADD `telephone` VARCHAR(100) NULL AFTER `address`;
+ALTER TABLE `offices` ADD `fax` VARCHAR(150) NULL AFTER `telephone`, ADD `email` VARCHAR(100) NULL AFTER `fax`;
+ALTER TABLE `offices` ADD `regional_manager` VARCHAR(150) NULL AFTER `email`;
+UPDATE `offices` SET `email` = 'office@pr.beml.co.in' WHERE `offices`.`id` = 1;
+UPDATE `offices` SET `email` = 'office@pr.beml.co.in' WHERE `offices`.`id` = 2;
+UPDATE `offices` SET `fax` = '+91 80 22963278' WHERE `offices`.`id` = 1;
+UPDATE `offices` SET `fax` = '+91 80 22963278' WHERE `offices`.`id` = 2;
+
+UPDATE `offices` SET `office_type` = 'Corporate Office' WHERE `offices`.`id` = 1;
+
+UPDATE `offices` SET `office_type` = 'Investor Service Centre Office' WHERE `offices`.`id` = 2;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

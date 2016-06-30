@@ -102,48 +102,36 @@ class User extends REST_Controller
 
     public function forgot_password_post()
     {
-        $key = $this->rest->key;
-        $email = $this->post('email');
-        if (!empty($email))
+        $employee_id = $this->post('employee_id');
+        $date_of_birth = $this->post('date_of_birth');
+        $date_of_join = $this->post('date_of_join');
+        if (!empty($employee_id) && !empty($date_of_birth) && !empty($date_of_join))
         {
-            $user = $this->Pari_users_model->get_user_by_email($email);
-            if (isset($user['0']) && !empty($user['0']))
+            $user_details = $this->User_model->get_user_by_employee_details($employee_id, $date_of_birth, $date_of_join);
+            if (!empty($user_details) && !empty($user_details[0]))
             {
-                $user = $user['0'];
-                $message = "";
-                //send a mail
-                $title = $this->config->item('parippuvada_title');
-                $site_url = WEBSITE_URL;
+                $current_time = get_current_datetime();
+                $user_details = $user_details[0];
+                $user_id = $user_details->id;
+                $user_details = array(
+                    'name' => '',
+                    'password' => '',
+                    'modified_date' => $current_time,
+                    'is_registered' => 0
+                );
 
-                $pass_rest_key = random_password();
-                $link_key = encrypt($email . '||' . $pass_rest_key);
-
-                $reset_link = $site_url . "/password/recover_password/" . $link_key;
-                $user_details['pass_rest_key'] = $link_key;
-                $this->Pari_users_model->update_users_details($user->id, $user_details);
-
-                $message = "Hi " . $user->firstname . " " . $user->lastname . ",<br>";
-                $message.= "To change your password for " . $title . ", you must click on following this link:<br><br>";
-                $message.= "<a href='" . $reset_link . "'>" . $reset_link . "</a><br>";
-                $message.= "(If clicking on the link doesn't work, copy and paste it into your browser.)<br><br>";
-                $message.= "Thanks,<br>" . $title . "  Administrator";
-                $to = $user->email;
-                $subject = "Your request for change password of " . $title . "";
-                $admin = $this->Pari_admindetails_model->get_details(1);
-                $from = $admin['email'];
-                $fromname = $title;
-
-                send_mail($to, $message, $subject, $from, $fromname);
-                $this->response(array('result_code' => 200, 'result_title' => 'Success', 'result_string' => "We have sent a password reset link to $to"));
+                $user_details = $this->User_model->update_users_details($user_id, $user_details);
+                $user = $this->User_model->get_user_by_id($user_id);
+                $this->response(array('result_code' => 200, 'result_title' => 'Success', 'result_string' => 'Successfully updated the user details.'));
             }
             else
             {
-                $this->response(array('result_code' => 400, 'result_title' => 'Error', 'result_string' => 'Invalid email address!'));
+                $this->response(array('result_code' => 400, 'result_title' => 'Error', 'result_string' => 'Invalid employee details.'));
             }
         }
         else
         {
-            $this->response(array('result_code' => 400, 'result_title' => 'Error', 'result_string' => 'Please provide valid email address.'));
+            $this->response(array('result_code' => 400, 'result_title' => 'Error', 'result_string' => 'Please provide employee details.'));
         }
     }
 

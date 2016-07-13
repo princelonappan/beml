@@ -54,7 +54,7 @@
                                         <td><?php echo $post['title']; ?></td>                  
                                         <td><?php echo $post['body']; ?></td>
                                         <td><?php echo $post['category_name']; ?></td>
-                                        <td><?php echo $post['created_date']; ?></td>
+                                        <td><?php echo $post['post_created_date']; ?></td>
 
                                         <td class="td-actions">
                                             <div class="hidden-phone visible-desktop action-buttons">

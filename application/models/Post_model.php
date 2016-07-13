@@ -38,6 +38,7 @@ Class Post_model extends CI_Model
                  'media_type' => $data['media_type'],   
                  'file_path' => $data['image'],   
                  'media_url' => $data['media_url'],
+                 'is_share' => $data['is_share'],
                  'created_date' => $date,   
                  'modified_date' => $date
             );
@@ -47,9 +48,10 @@ Class Post_model extends CI_Model
     
     public function get_posts()
     {
-        $this->db->select('*,a.id as cat_id, post.id as post_id');
+        $this->db->select('*,a.id as cat_id, post.id as post_id, post.created_date as post_created_date');
         $this->db->from('post');
         $this->db->join('post_category as a','post.category_id = a.id');
+        $this->db->order_by("post.created_date", "desc"); 
         $query = $this->db->get();
         return $query->result_array();
     }

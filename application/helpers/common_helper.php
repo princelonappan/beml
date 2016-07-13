@@ -133,6 +133,13 @@ function get_logged_user_id()
         }
 }
 
+function format_date($date, $format='Y-m-d H:i:s')
+{
+    date_default_timezone_set('Asia/Calcutta');
+    $now = new DateTime($date);
+    return $now->format($format);
+}
+
 function format_post($posts, $user_id, $is_favourite = false)
 {
     $CI = & get_instance();
@@ -177,7 +184,7 @@ function format_post($posts, $user_id, $is_favourite = false)
         $post_details[$i]['comment_count'] = $post['comment_count'];
         $post_details[$i]['category_id'] = $post['cat_id'];
         $post_details[$i]['category_name'] = $post['category_name'];
-        $post_details[$i]['created_date'] = $post['post_created_date'];
+        $post_details[$i]['created_date'] = format_date($post['post_created_date'], 'd M Y');
         $i++;
     }
     
@@ -195,7 +202,7 @@ function format_post_comments($comments)
         $post_comment_details[$i]['user_id'] = $comment['user_id'];
         $post_comment_details[$i]['comment'] = $comment['comment'];
         $post_comment_details[$i]['commented_by'] = $comment['name'];
-        $post_comment_details[$i]['created_date'] = $comment['post_commented_date'];
+        $post_comment_details[$i]['created_date'] = format_date($comment['post_commented_date'], 'd M Y');
         $i++;
     }
     

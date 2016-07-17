@@ -11,6 +11,7 @@ class Post extends Front_Controller
         parent::__construct();
         $this->load->library('session');
         $this->load->model('Post_category_model');
+        $this->load->model('Post_comments_model');
         $this->load->model('Post_model');
     }
 
@@ -93,6 +94,99 @@ class Post extends Front_Controller
     {
         $data['post'] = $this->Post_model->get_post_details($id);
         $this->template->build('/post/view_post', $data);
+    }
+    
+    public function delete($id)
+    {
+        if(isset($id) && !empty($id)) 
+        {
+            $this->Post_model->delete_post($id);
+            header("Location:/post");
+        }
+        else
+        {
+            header("Location:/post");
+        }
+    }
+    
+    public function edit($id)
+    {
+        if(isset($id) && !empty($id)) 
+        {
+            $catgories = $this->Post_category_model->get_categories();
+            $data['categories'] = $catgories;
+            $data['post'] = $this->Post_model->get_post_details($id);
+            $this->template->build('/post/edit_post', $data);
+        }
+        else
+        {
+            header("Location:/post");
+        }
+    }
+    
+    public function edit_details()
+    {
+        $post_id = $this->input->post('post_id');
+        $title = $this->input->post('title');
+        $body = $this->input->post('body');
+        $category = $this->input->post('category');
+        $media_type = $this->input->post('media_type');
+        $media_url = $this->input->post('media_url');
+        $can_share = $this->input->post('can_share');
+        $image = NULL;
+        $data = array();
+        if(isset($title) && !empty($body) 
+                && isset($category) && !empty($media_type))
+        {       
+            if (isset($_FILES['image']) && $_FILES['image']['size'] > 0)
+            {
+                    $image = $this->_upload_image_beml($_FILES);
+            }
+            $data['title'] = $title;
+            $data['body'] = $body;
+            $data['category_id'] = $category;
+            if($media_type)
+                $data['media_type'] = $media_type;
+            if($media_url)
+                $data['media_url'] = $media_url;
+            if($image)
+                $data['file_path'] = $image;
+            
+            $data['is_share'] = $can_share;
+            $data['modified_date'] = get_current_datetime();
+            $this->Post_model->update_post_details($post_id, $data);
+            $this->session->set_flashdata('message', 'Post Updated');
+            redirect('/post');
+            
+        }
+    }
+    
+    public function view_comments($id)
+    {
+        if(isset($id) && !empty($id)) 
+        {
+            $data['post'] = $this->Post_model->get_post_details($id);
+            $data['comments'] = $this->Post_comments_model->get_all_post_comments($id);
+            $this->template->build('/post/post_comment_list', $data);
+        }
+        else
+        {
+            header("Location:/post");
+        }
+    }
+    
+    public function change_comment_status($id, $status, $post_id)
+    {
+        if(isset($id) && !empty($id) && $status) 
+        {
+            $update_data['status'] = $status;
+            $this->Post_comments_model->updated_post_comment($id, $update_data);
+            header("Location:/post/view_comments/".$post_id);
+        }
+        else
+        {
+            header("Location:/post");
+        }
     }
 }
 

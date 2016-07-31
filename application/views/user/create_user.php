@@ -28,7 +28,7 @@
                 
                 <form class="form-horizontal style-form" id="validation-form" method="POST" action="<?php echo $this->config->base_url(); ?>user/save_details" enctype="multipart/form-data">
                                         <div class="step-content row-fluid position-relative" id="step-container">
-                                            <div class="alert alert-success">
+                                            <div class="alert ">
                                              <?php $message = $this->session->flashdata('message'); 
                                              echo $message; ?>
                                             </div>

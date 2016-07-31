@@ -34,6 +34,7 @@ Class User_model extends CI_Model
         $this->db->where('employee_id =', $employee_id);
         $this->db->where('date_of_birth =', $date_of_birth);
         $this->db->where('date_of_join =', $date_of_join);
+        $this->db->where('status =', 1);
         $query = $this->db->get();
         return $query->result();
     }
@@ -60,6 +61,19 @@ Class User_model extends CI_Model
         $this->db->where('id =', $user_id);
         $query = $this->db->get();
         return $query->result();
+    }
+    
+    public function get_all_users() 
+    {
+        $this->db->select('*');
+        $this->db->from('users');
+        $query = $this->db->get();
+        return $query->result();
+    }
+    
+    public function save_user_details($user_details)
+    {
+        return $this->db->insert('users', $user_details); 
     }
 
 }

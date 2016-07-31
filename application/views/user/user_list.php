@@ -11,7 +11,7 @@
                     <i class="icon-angle-right arrow-icon"></i>
                 </span>
             </li>
-            <li class="active"> Users</li>
+            <li class="active"> Employees</li>
         </ul><!--.breadcrumb-->
 
         <?php if (isset($studetns) && !empty($studetns))
@@ -31,7 +31,7 @@
     <div class="page-content">
         <div class="page-header position-relative">
             <h1>
-                Users
+                Employees
             </h1>
         </div><!--/.page-header-->
 
@@ -42,89 +42,51 @@
 
                 <div class="row-fluid">
                     <div class="table-header">
-                        Manage Users
+                        Manage Employees
                     </div>
                     <?php
-                    if (isset($students) && !empty($students))
+                    if (isset($user_details) && !empty($user_details))
                     {
                         ?>
                         <table id="sample-table-2" class="table table-striped table-bordered table-hover">
                             <thead>
                                 <tr>
-                                    <th>Student Number</th>
-                                    <th>Student Name</th>
-                                    <th>Email Address</th>
-                                    <th>Tele phone</th>
-                                    <th class="hidden-480"><i class="icon-time bigger-110 hidden-phone"></i> Date of Registration</th>
                                     <th></th>
+                                    <th>Employee Id</th>
+                                    <th>Employee Name</th>
+                                    <th>Date of Birth</th>
+                                    <th>Date of Join</th>
+                                    <th>Status</th>
+                                    <th class="hidden-480"></th>
                                 </tr>
                             </thead>
 
                             <tbody>
                                 <?php
-                                foreach ($students as $student)
+                                $i = 1;
+                                foreach ($user_details as $user)
                                 {
+                                    $new_status = $user->status == 1 ? 2 : 1;
+                                    $status = $user->status == 1 ? 'Active' : 'Deactive';
                                     ?>
                                     <tr>
-                                        <td><?php echo $student->id; ?></td>
+                                        <td><?php echo $i; ?></td>
+                                        <td><?php echo $user->employee_id; ?></td>
                                         <td>
-                                            <a href="#"><?php echo $student->first_name . ' ' . $student->middle_name . ' ' . $student->last_name; ?></a>
+                                            <a href="#"><?php echo $user->name; ?></a>
                                         </td>
-                                        <td><?php echo $student->email; ?></td>
-                                        <td ><?php echo $student->telephone_number; ?></td>
-                                        <td ><?php echo $student->date_of_registration; ?></td>
-
+                                        <td><?php echo $user->date_of_birth; ?></td>
+                                        <td ><?php echo $user->date_of_join; ?></td>
+                                        <td><?php echo $status; ?></td>
                                         <td class="td-actions">
                                             <div class="hidden-phone visible-desktop action-buttons">
-                                                <a class="blue" href="#" data-rel="tooltip" title="View enrolled course details">
-                                                    <i class="icon-zoom-in bigger-130"></i>
-                                                </a>
-
-                                                <a class="green" href="#" data-rel="tooltip" title="Edit student details">
+                                                <a onclick="change_user_status(<?php echo $user->id; ?>, <?php echo $new_status; ?>)" class="red"  data-rel="tooltip" title="Change Employee details">
                                                     <i class="icon-pencil bigger-130"></i>
                                                 </a>
-
-                                                <a class="red" href="#" data-rel="tooltip" title="Delete student details">
-                                                    <i class="icon-trash bigger-130"></i>
-                                                </a>
-                                            </div>
-
-                                            <div class="hidden-desktop visible-phone">
-                                                <div class="inline position-relative">
-                                                    <button class="btn btn-minier btn-yellow dropdown-toggle" data-toggle="dropdown">
-                                                        <i class="icon-caret-down icon-only bigger-120"></i>
-                                                    </button>
-
-                                                    <ul class="dropdown-menu dropdown-icon-only dropdown-yellow pull-right dropdown-caret dropdown-close">
-                                                        <li>
-                                                            <a href="#" class="tooltip-info" data-rel="tooltip" title="View enrolled course details">
-                                                                <span class="blue">
-                                                                    <i class="icon-zoom-in bigger-120"></i>
-                                                                </span>
-                                                            </a>
-                                                        </li>
-
-                                                        <li>
-                                                            <a href="#" class="tooltip-success" data-rel="tooltip" title="Edit student details">
-                                                                <span class="green">
-                                                                    <i class="icon-edit bigger-120"></i>
-                                                                </span>
-                                                            </a>
-                                                        </li>
-
-                                                        <li>
-                                                            <a href="#" class="tooltip-error" data-rel="tooltip" title="Delete student details">
-                                                                <span class="red">
-                                                                    <i class="icon-trash bigger-120"></i>
-                                                                </span>
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
                                             </div>
                                         </td>
                                     </tr>
-                        <?php } ?>
+                        <?php $i++; } ?>
                             </tbody>
                         </table>
 <?php }
@@ -148,11 +110,12 @@ else
 
 
 <script type="text/javascript">
-    $(function () {
-        var oTable1 = $('#sample-table-2').dataTable({
+    $(function () {    
+      var oTable1 = $('#sample-table-2').dataTable({
             "aoColumns": [
                 {"bSortable": false},
                 {"bSortable": true},
+                {"bSortable": false},
                 {"bSortable": false},
                 {"bSortable": false},
                 {"bSortable": false},
@@ -184,8 +147,17 @@ else
             if (parseInt(off2.left) < parseInt(off1.left) + parseInt(w1 / 2))
                 return 'right';
             return 'left';
-        }
-    })
+        } 
+    });
+    
+    function change_user_status(id, status) 
+    {
+           var strconfirm = confirm("Are you sure you want to change status?");
+           if (strconfirm == true)
+            {
+                window.location = "/user/change_status/"+id+"/"+status;
+            }
+       }
 </script>
 </body>
 </html>

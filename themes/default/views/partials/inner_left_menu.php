@@ -40,7 +40,7 @@
                                         <li>
 						<a href="/student" class="dropdown-toggle">
 							<i class="icon-user"></i>
-							<span class="menu-text">Manage User</span>
+							<span class="menu-text">Manage Employee </span>
 
 							<b class="arrow icon-angle-down"></b>
 						</a>
@@ -49,7 +49,13 @@
                                                  <li>
 								<a href="<?php echo $this->config->base_url(); ?>user">
 									<i class="icon-double-angle-right"></i>
-									Users
+									Employees
+								</a>
+							</li>
+                                                         <li>
+								<a href="<?php echo $this->config->base_url(); ?>user/create">
+									<i class="icon-double-angle-right"></i>
+									Create Employee
 								</a>
 							</li>
 						

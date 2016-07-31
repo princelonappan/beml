@@ -10,11 +10,70 @@ class User extends Front_Controller
     {
         parent::__construct();
         $this->load->library('session');
+        $this->load->model('User_model');
     }
 
     public function index()
     {
-        $this->template->build('/user/user_list');
+        $data['user_details'] = $this->User_model->get_all_users();
+        $this->template->build('/user/user_list', $data);
+    }
+    
+    public function create()
+    {
+       $this->template->build('/user/create_user'); 
+    }
+    
+    public function save_details()
+    {
+        $employee_id = $_POST['employee_id'];
+        $dob = $_POST['dob'];
+        $doj = $_POST['doj'];
+        if(!empty($employee_id) && !empty($dob) && !empty($doj))
+        {
+            $date_of_birth = date("Y-m-d", strtotime($dob));
+            $date_of_join = date("Y-m-d", strtotime($doj));
+            echo $date_of_birth;
+            echo " <br/>";
+            echo $date_of_join;
+            $user_details = $this->User_model->get_user_by_employee_id($employee_id);
+            if (empty($user_details))
+            {
+                $user_details['employee_id'] = $employee_id;
+                $user_details['date_of_birth'] = $date_of_birth;
+                $user_details['date_of_join'] = $date_of_join;
+                $user_details['created_date'] = $user_details['modified_date'] = get_current_datetime();
+                $this->User_model->save_user_details($user_details);
+                $this->session->set_flashdata('message', 'Created the user details.');
+                header("Location:/user");
+            }
+            else
+            {
+                $this->session->set_flashdata('message', 'Already employee id is taken.');
+                header("Location:/user");
+            }
+        }
+        else
+        {
+            header("Location:/user");
+        }
+    }
+
+
+    public function change_status($id, $status)
+    {
+        if (isset($id) && !empty($id))
+        {
+            $user_details = array(
+                'status' => $status);
+
+            $user_details = $this->User_model->update_users_details($id, $user_details);
+            header("Location:/user");
+        }
+        else
+        {
+            header("Location:/user");
+        }
     }
 }
 

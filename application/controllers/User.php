@@ -33,9 +33,6 @@ class User extends Front_Controller
         {
             $date_of_birth = date("Y-m-d", strtotime($dob));
             $date_of_join = date("Y-m-d", strtotime($doj));
-            echo $date_of_birth;
-            echo " <br/>";
-            echo $date_of_join;
             $user_details = $this->User_model->get_user_by_employee_id($employee_id);
             if (empty($user_details))
             {
@@ -45,12 +42,12 @@ class User extends Front_Controller
                 $user_details['created_date'] = $user_details['modified_date'] = get_current_datetime();
                 $this->User_model->save_user_details($user_details);
                 $this->session->set_flashdata('message', 'Created the user details.');
-                header("Location:/user");
+                header("Location:/user/create");
             }
             else
             {
                 $this->session->set_flashdata('message', 'Already employee id is taken.');
-                header("Location:/user");
+                header("Location:/user/create");
             }
         }
         else

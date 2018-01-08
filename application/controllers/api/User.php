@@ -26,6 +26,7 @@ class User extends REST_Controller
         parent::__construct();
         $this->load->model('User_model');
         $this->load->model('Key_model');
+        $this->load->model('Otp_authentication_model');
     }
 
     public function signup_post()
@@ -33,9 +34,11 @@ class User extends REST_Controller
         $employee_id = $this->post('employee_id');
         $date_of_birth = $this->post('date_of_birth');
         $date_of_join = $this->post('date_of_join');
-        if (!empty($employee_id) && !empty($date_of_birth) && !empty($date_of_join))
+        $mobile_number = $this->post('mobile_number');
+        if (!empty($employee_id) && !empty($date_of_birth) && !empty($date_of_join)
+                && !empty($mobile_number))
         {
-            $user_details = $this->User_model->get_user_by_employee_details($employee_id, $date_of_birth, $date_of_join);
+            $user_details = $this->User_model->get_user_by_employee_details($employee_id, $date_of_birth, $date_of_join, $mobile_number);
             if (!empty($user_details) && !empty($user_details[0]))
             {
                 $user_details = $user_details[0];
@@ -57,7 +60,9 @@ class User extends REST_Controller
                     }
                     else
                         unset($user_details->user_profile_image);
-
+                    
+                    //sending the otp token to the mobile number.
+                    
                     $this->response(array('result_code' => 200, 'result_title' => 'Success',
                         'result_string' => 'Success', 'user' => $user_details));
                 }
@@ -84,6 +89,48 @@ class User extends REST_Controller
             if (isset($user_details['0']) && !empty($user_details['0']))
             {
                 $user = $user_details['0'];
+                $password_md5 = $user->password;
+                if ($password_md5 == md5($password))
+                {
+                    $update_data['user_id'] = $user->id;
+                    $this->Key_model->update_key_details($key, $update_data);
+
+                    if ($user->user_profile_image && !empty($user->user_profile_image))
+                    {
+                        $user->user_profile_image = base_url() . 'uploads/user_profile_images/' . $user->user_profile_image;
+                    }
+                    else
+                        unset($user->user_profile_image);
+
+                    $this->response(array('result_code' => 200, 'result_title' => 'Success', 'user' => $user));
+                }
+                else
+                {
+                    $this->response(array('result_code' => 400, 'result_title' => 'Error', 'result_string' => 'Invalid employee details!'));
+                }
+            }
+            else
+            {
+                $this->response(array('result_code' => 400, 'result_title' => 'Error', 'result_string' => 'Invalid employee details'));
+            }
+        }
+        else
+        {
+            $this->response(array('result_code' => 400, 'result_title' => 'Error', 'result_string' => 'Please provide user details.'));
+        }
+    }
+    
+    public function verify_otp_post()
+    {
+        $key = $this->rest->key;
+        $mobile_number = $this->post('mobile_number');
+        $otp = $this->post('otp');
+        if (!empty($mobile_number) && !empty($otp))
+        {
+            $otp_details = $this->Otp_authentication_model->get_otp_details($mobile_number, $otp);
+            if (isset($otp_details['0']) && !empty($otp_details['0']))
+            {
+                $otp = $otp_details['0'];
                 $password_md5 = $user->password;
                 if ($password_md5 == md5($password))
                 {

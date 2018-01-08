@@ -1,7 +1,40 @@
-ALTER TABLE `user_master_details` ADD `CREATED_BY` INT NOT NULL AFTER `ACTIVE`, ADD `CREATED_DATE` DATETIME NOT NULL AFTER `CREATED_BY`;
-ALTER TABLE `user_master_details` ADD `USER_IMAGE` VARCHAR(255) NOT NULL , ADD `USER_SIGNATURE` VARCHAR(255) NOT NULL ;
+--
+-- 08/01/2018
+--
 
+ALTER TABLE  `users` ADD  `mobile_number` INT( 15 ) NULL DEFAULT NULL AFTER  `employee_id` ;
 
+--
+-- Table structure for table `otp_authentication`
+--
 
+CREATE TABLE `otp_authentication` (
+  `id` int(11) NOT NULL,
+  `mobile_number` int(11) NOT NULL,
+  `otp` int(11) NOT NULL,
+  `is_verified` tinyint(4) NOT NULL DEFAULT '0',
+  `created_date` date DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-ALTER TABLE `loan_acc_det` ADD `L_AMOUNT` FLOAT (20,2) NOT NULL AFTER `L_ACC_NO`;
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `otp_authentication`
+--
+ALTER TABLE `otp_authentication`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `otp_authentication`
+--
+ALTER TABLE `otp_authentication`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `otp_authentication` ADD `type` TINYINT NULL COMMENT '1- signup 2 - forgot password' AFTER `created_date`;
+ALTER TABLE `otp_authentication` CHANGE `created_date` `created_date` DATETIME NULL DEFAULT NULL;

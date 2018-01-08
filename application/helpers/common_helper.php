@@ -208,3 +208,32 @@ function format_post_comments($comments)
     
     return $post_comment_details;
 }
+
+function send_otp($mobile_number, $type) 
+{
+    $otp = rand(1001, 9999);
+    $CI = & get_instance();
+    $CI->load->model('Otp_authentication_model');
+    $otp_details = $CI->Otp_authentication_model->get_otp_details($mobile_number, $otp);
+    if(empty($otp_details)) 
+    {
+        $otp_authentication_details = save_otp_details($otp, $mobile_number, $type);
+    }
+    else 
+    {
+        $otp = rand(1001, 9999);
+        $otp_authentication_details = save_otp_details($otp, $mobile_number, $type);
+    }
+    
+    $CI->Otp_authentication_model->save_otp($otp_authentication_details);
+    //Sending the OTP Code
+    
+}
+
+function save_otp_details($otp, $mobile_number, $type)
+{
+    $otp_details['otp'] = $otp;
+    $otp_details['mobile_number'] = $mobile_number;
+    $otp_details['type'] = $type;
+    $otp_details['created_date'] = get_current_datetime();
+}

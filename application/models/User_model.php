@@ -49,6 +49,15 @@ Class User_model extends CI_Model
         return $query->result();
     }
     
+    public function get_user_by_mobile_id($employee_id)
+    {
+        $this->db->select('*');
+        $this->db->from('users');
+        $this->db->where('mobile_number =', $employee_id);
+        $query = $this->db->get();
+        return $query->result();
+    }
+    
     public function update_users_details($user_id, $data)
     {
         $this->db->where('id', $user_id);

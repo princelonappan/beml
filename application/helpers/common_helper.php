@@ -1,5 +1,5 @@
 <?php
-
+require(APPPATH . '/libraries/Textlocal.class.php');
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -224,10 +224,24 @@ function send_otp($mobile_number, $type)
         $otp = rand(1001, 9999);
         $otp_authentication_details = save_otp_details($otp, $mobile_number, $type);
     }
-    
+    //Deleting the previous otp entries
+    $CI->Otp_authentication_model->delete_previous_otp_entries($mobile_number, $type);
     $CI->Otp_authentication_model->save_otp($otp_authentication_details);
     //Sending the OTP Code
+    $textlocal_api_key = $CI->config->item('textlocal_api_key');
+    $textlocal_sender = $CI->config->item('sms_title');
+    $Textlocal = new Textlocal(false, false, $textlocal_api_key);
+    //appending the 91 with mobile number
+    $mobile_number_with_code = '91'.$mobile_number;
+    $numbers = array($mobile_number_with_code);
+    $sender = $textlocal_sender;
+    if($type == 1)
+        $message = 'Your OTP Pin is'.$otp.'. Enter this pin to activate your account.';
+    else
+        $message = 'Your OTP Pin is'.$otp.'. Enter this pin to set a new password for your account.';
     
+    $response = $Textlocal->sendSms($numbers, $message, $sender);
+    print_r($response);
 }
 
 function save_otp_details($otp, $mobile_number, $type)
@@ -236,4 +250,5 @@ function save_otp_details($otp, $mobile_number, $type)
     $otp_details['mobile_number'] = $mobile_number;
     $otp_details['type'] = $type;
     $otp_details['created_date'] = get_current_datetime();
+    return $otp_details;
 }

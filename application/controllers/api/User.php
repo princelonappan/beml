@@ -120,6 +120,30 @@ class User extends REST_Controller
         }
     }
     
+    public function send_otp_post()
+    {
+        $key = $this->rest->key;
+        $mobile_number = $this->post('mobile_number');
+        if (!empty($mobile_number))
+        {
+            $user_details = $this->User_model->get_user_by_mobile_id($mobile_number);
+            if (isset($user_details['0']) && !empty($user_details['0']))
+            {
+                $user = $user_details['0'];
+                //sending the otp number to the mobile number
+                send_otp($mobile_number, 2);
+            }
+            else
+            {
+                $this->response(array('result_code' => 400, 'result_title' => 'Error', 'result_string' => 'No user registered with the mobile number.'));
+            }
+        }
+        else
+        {
+            $this->response(array('result_code' => 400, 'result_title' => 'Error', 'result_string' => 'Please provide mobile details.'));
+        }
+    }
+    
     public function verify_otp_post()
     {
         $key = $this->rest->key;
@@ -130,8 +154,9 @@ class User extends REST_Controller
             $otp_details = $this->Otp_authentication_model->get_otp_details($mobile_number, $otp);
             if (isset($otp_details['0']) && !empty($otp_details['0']))
             {
-                $otp = $otp_details['0'];
-                $password_md5 = $user->password;
+                $otp_details = $otp_details['0'];
+                
+                $password_md5 = $otp_details->otp;
                 if ($password_md5 == md5($password))
                 {
                     $update_data['user_id'] = $user->id;

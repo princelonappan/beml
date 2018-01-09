@@ -19,6 +19,23 @@ Class Otp_authentication_model extends CI_Model
     
     public function save_otp($otp_details)
     {
+        $this->db->set($otp_details);
         return $this->db->insert('otp_authentication', $otp_details); 
+    }
+    
+    public function delete_previous_otp_entries($mobile_number, $type)
+    {
+        try
+        {
+            $this->db->where('mobile_number', $mobile_number);
+            $this->db->where('type', $type);
+            $this->db->where('is_verified', 0);
+            $this->db->delete('otp_authentication');
+            return true;
+            
+        } catch (Exception $exc)
+        {
+            return false;
+        }
     }
 }

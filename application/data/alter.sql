@@ -38,3 +38,6 @@ ALTER TABLE `otp_authentication`
 
 ALTER TABLE `otp_authentication` ADD `type` TINYINT NULL COMMENT '1- signup 2 - forgot password' AFTER `created_date`;
 ALTER TABLE `otp_authentication` CHANGE `created_date` `created_date` DATETIME NULL DEFAULT NULL;
+ALTER TABLE `users` CHANGE `mobile_number` `mobile_number` VARCHAR(15) NULL DEFAULT NULL;
+ALTER TABLE `otp_authentication` CHANGE `mobile_number` `mobile_number` VARCHAR(15) NOT NULL;
+ALTER TABLE `otp_authentication` CHANGE `otp` `otp` VARCHAR(8) NOT NULL;

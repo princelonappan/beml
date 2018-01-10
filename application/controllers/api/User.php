@@ -51,9 +51,6 @@ class User extends REST_Controller
                 }
                 else
                 {
-                    $key = $this->rest->key;
-                    $update_data['user_id'] = $user_id;
-                    $this->Key_model->update_key_details($key, $update_data);
                     if ($user_details->user_profile_image && !empty($user_details->user_profile_image))
                     {
                         $user_details->user_profile_image = base_url() . 'uploads/user_profile_images/' . $user_details->user_profile_image;
@@ -62,9 +59,17 @@ class User extends REST_Controller
                         unset($user_details->user_profile_image);
                     
                     //sending the otp token to the mobile number.
-                    
-                    $this->response(array('result_code' => 200, 'result_title' => 'Success',
+                    $response = send_otp($mobile_number, 1);
+                    if($response['success'] == true)
+                    {
+                        $this->response(array('result_code' => 200, 'result_title' => 'Successfully sent the OTP to the mobile number.',
                         'result_string' => 'Success', 'user' => $user_details));
+                    }
+                    else 
+                    {
+                        $this->response(array('result_code' => 400, 'result_title' => 'Error',
+                        'result_string' => 'Error occured while sending the OTP. Please try after sometime.'));
+                    }
                 }
             }
             else
@@ -120,18 +125,32 @@ class User extends REST_Controller
         }
     }
     
+    /**
+     * Send OTP
+     */
     public function send_otp_post()
     {
         $key = $this->rest->key;
         $mobile_number = $this->post('mobile_number');
-        if (!empty($mobile_number))
+        $type = $this->post('type');
+        if (!empty($mobile_number) && !empty($type))
         {
             $user_details = $this->User_model->get_user_by_mobile_id($mobile_number);
             if (isset($user_details['0']) && !empty($user_details['0']))
             {
                 $user = $user_details['0'];
                 //sending the otp number to the mobile number
-                send_otp($mobile_number, 2);
+                $response = send_otp($mobile_number, $type);
+                if ($response['success'] == true)
+                {
+                    $this->response(array('result_code' => 200, 'result_title' => 'Successfully sent the OTP to the mobile number.',
+                        'result_string' => 'Success'));
+                }
+                else
+                {
+                    $this->response(array('result_code' => 400, 'result_title' => 'Error',
+                        'result_string' => 'Error occured while sending the OTP. Please try after sometime.'));
+                }
             }
             else
             {
@@ -149,36 +168,58 @@ class User extends REST_Controller
         $key = $this->rest->key;
         $mobile_number = $this->post('mobile_number');
         $otp = $this->post('otp');
-        if (!empty($mobile_number) && !empty($otp))
+        $type = $this->post('type');
+        if (!empty($mobile_number) && !empty($otp) && !empty($type))
         {
-            $otp_details = $this->Otp_authentication_model->get_otp_details($mobile_number, $otp);
+            $otp_details = $this->Otp_authentication_model->get_otp_details($mobile_number, $otp, $type, true);
             if (isset($otp_details['0']) && !empty($otp_details['0']))
             {
                 $otp_details = $otp_details['0'];
-                
-                $password_md5 = $otp_details->otp;
-                if ($password_md5 == md5($password))
+                $user_details = $this->User_model->get_user_by_mobile_id($mobile_number);
+                $$otp_details_id = $otp_details->id;
+                if (isset($user_details['0']) && !empty($user_details['0']))
                 {
-                    $update_data['user_id'] = $user->id;
-                    $this->Key_model->update_key_details($key, $update_data);
-
-                    if ($user->user_profile_image && !empty($user->user_profile_image))
+                    $user = $user_details['0'];
+                    $user_id = $user->id;
+                    $update_otp_data['is_verified'] = 1;
+                    $this->Otp_authentication_model->update_otp_details($$otp_details_id, $update_otp_data);
+                    //If the type is signup, then updating the session with current user id.
+                    if ($type == 1)
                     {
-                        $user->user_profile_image = base_url() . 'uploads/user_profile_images/' . $user->user_profile_image;
+                        $key = $this->rest->key;
+                        $update_data['user_id'] = $user_id;
+                        $this->Key_model->update_key_details($key, $update_data);
+                        if ($user->user_profile_image && !empty($user->user_profile_image))
+                        {
+                            $user->user_profile_image = base_url() . 'uploads/user_profile_images/' . $user->user_profile_image;
+                        }
+                        else
+                            unset($user->user_profile_image);
+
+                        $this->response(array('result_code' => 200, 'result_title' => 'Success',
+                            'result_title' => 'Successfully verified the mobile number.','user' => $user, 'type' => $type));
                     }
                     else
-                        unset($user->user_profile_image);
-
-                    $this->response(array('result_code' => 200, 'result_title' => 'Success', 'user' => $user));
+                    {
+                        $reset_password_token = rand_string(30);
+                        $user_details = array(
+                            'reset_password_token' => $reset_password_token
+                        );
+                        
+                        $user_details = $this->User_model->update_users_details($user_id, $user_details);
+                        $this->response(array('result_code' => 200, 'result_title' => 'Success', 'user' => $user,
+                            'type' => $type, 'reset_password_token' => $reset_password_token));
+                    }                    
                 }
-                else
+                else 
                 {
-                    $this->response(array('result_code' => 400, 'result_title' => 'Error', 'result_string' => 'Invalid employee details!'));
+                    $this->response(array('result_code' => 400, 'result_title' => 'Error', 
+                        'result_string' => 'No user registered with the mobile number.'));
                 }
             }
             else
             {
-                $this->response(array('result_code' => 400, 'result_title' => 'Error', 'result_string' => 'Invalid employee details'));
+                $this->response(array('result_code' => 400, 'result_title' => 'Error', 'result_string' => 'Invalid OTP details'));
             }
         }
         else

@@ -7,12 +7,17 @@
 Class Otp_authentication_model extends CI_Model
 {
 
-    function get_otp_details($mobile_number, $otp)
+    function get_otp_details($mobile_number, $otp, $type, $is_verified_condition = false)
     {
         $this->db->select('*');
         $this->db->from('otp_authentication');
         $this->db->where('mobile_number =', $mobile_number);
         $this->db->where('otp =', $otp);
+        $this->db->where('type =', $type);
+        if($is_verified_condition == true)
+        {
+            $this->db->where('is_verified =', 0);
+        }
         $query = $this->db->get();
         return $query->result();
     }
@@ -38,4 +43,16 @@ Class Otp_authentication_model extends CI_Model
             return false;
         }
     }
+    
+    /**
+     * 
+     * @param type $id
+     * @param type $data
+     */
+    public function update_otp_details($id, $data)
+    {
+        $this->db->where('id', $id);
+        $this->db->update('otp_authentication' ,$data);
+    }
+    
 }

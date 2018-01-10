@@ -209,12 +209,19 @@ function format_post_comments($comments)
     return $post_comment_details;
 }
 
+/**
+ * 
+ * @param type $mobile_number
+ * @param type $type
+ * @return type
+ */
+
 function send_otp($mobile_number, $type) 
 {
     $otp = rand(1001, 9999);
     $CI = & get_instance();
     $CI->load->model('Otp_authentication_model');
-    $otp_details = $CI->Otp_authentication_model->get_otp_details($mobile_number, $otp);
+    $otp_details = $CI->Otp_authentication_model->get_otp_details($mobile_number, $otp, $type);
     if(empty($otp_details)) 
     {
         $otp_authentication_details = save_otp_details($otp, $mobile_number, $type);
@@ -224,24 +231,31 @@ function send_otp($mobile_number, $type)
         $otp = rand(1001, 9999);
         $otp_authentication_details = save_otp_details($otp, $mobile_number, $type);
     }
-    //Deleting the previous otp entries
-    $CI->Otp_authentication_model->delete_previous_otp_entries($mobile_number, $type);
-    $CI->Otp_authentication_model->save_otp($otp_authentication_details);
     //Sending the OTP Code
     $textlocal_api_key = $CI->config->item('textlocal_api_key');
     $textlocal_sender = $CI->config->item('sms_title');
     $Textlocal = new Textlocal(false, false, $textlocal_api_key);
     //appending the 91 with mobile number
-    $mobile_number_with_code = '91'.$mobile_number;
-    $numbers = array($mobile_number_with_code);
+    $numbers = array($mobile_number);
     $sender = $textlocal_sender;
     if($type == 1)
-        $message = 'Your OTP Pin is'.$otp.'. Enter this pin to activate your account.';
+        $message = 'Your OTP Pin is '.$otp.'. Enter this pin to activate your account.';
     else
-        $message = 'Your OTP Pin is'.$otp.'. Enter this pin to set a new password for your account.';
-    
-    $response = $Textlocal->sendSms($numbers, $message, $sender);
-    print_r($response);
+        $message = 'Your OTP Pin is '.$otp.'. Enter this pin to set a new password for your account.';
+
+//    $response = $Textlocal->sendSms($numbers, $message, $sender);
+//    if(isset($response) && !empty($response) && isset($response->status) && $response->status == 'success') 
+//    {
+        $otp_authentication_details['message_response'] = json_encode($response);
+        //Deleting the previous otp entries
+        $CI->Otp_authentication_model->delete_previous_otp_entries($mobile_number, $type);
+        $CI->Otp_authentication_model->save_otp($otp_authentication_details);
+        return array('success' => true);
+//    } 
+//    else 
+//    {
+//        return array('success' => false);
+//    }
 }
 
 function save_otp_details($otp, $mobile_number, $type)

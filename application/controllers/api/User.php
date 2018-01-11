@@ -227,6 +227,40 @@ class User extends REST_Controller
             $this->response(array('result_code' => 400, 'result_title' => 'Error', 'result_string' => 'Please provide user details.'));
         }
     }
+    
+    public function change_password_post()
+    {
+        $reset_password_token = $this->post('reset_password_token');
+        $new_password = $this->post('new_password');
+        $confirm_password = $this->post('confirm_password');
+        if (!empty($reset_password_token) && !empty($new_password) && !empty($confirm_password))
+        {
+            $user = $this->User_model->get_user_by_token($reset_password_token);
+            if (isset($user['0']) && !empty($user['0']))
+            {
+                $user = $user['0'];
+                $user_id = $user->id;
+                if ($new_password == $confirm_password)
+                {
+                    $user_details = $this->User_model->update_users_details($user_id, array('password' => md5($new_password), 'reset_password_token' => ''));
+                    $user = $this->User_model->get_user_by_id($user_id);
+                    $this->response(array('result_code' => 200, 'result_title' => 'Success', 'user' => $user[0], 'result_string' => 'Successfully updated the user password.'));
+                }
+                else
+                {
+                    $this->response(array('result_code' => 200, 'result_title' => 'Error', 'result_string' => 'Please provide the valid password.'));
+                }
+            }
+            else
+            {
+                $this->response(array('result_code' => 400, 'result_title' => 'Error', 'result_string' => 'Please provide valid user session details.'));
+            }
+        } 
+        else 
+        {
+            $this->response(array('result_code' => 400, 'result_title' => 'Error', 'result_string' => 'Please provide valid details.'));
+        }
+    }
 
     public function forgot_password_post()
     {

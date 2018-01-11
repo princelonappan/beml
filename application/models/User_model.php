@@ -85,6 +85,15 @@ Class User_model extends CI_Model
     {
         return $this->db->insert('users', $user_details); 
     }
+    
+    public function get_user_by_token($reset_password_token)
+    {
+        $this->db->select('*');
+        $this->db->from('users');
+        $this->db->where('reset_password_token =', $reset_password_token);
+        $query = $this->db->get();
+        return $query->result();
+    }
 
 }
 

@@ -27,14 +27,17 @@ Class User_model extends CI_Model
         }
     }
     
-    public function get_user_by_employee_details($employee_id, $date_of_birth, $date_of_join, $mobile_number)
+    public function get_user_by_employee_details($employee_id, $date_of_birth, $date_of_join, $mobile_number = NULL)
     {
         $this->db->select('*');
         $this->db->from('users');
         $this->db->where('employee_id =', $employee_id);
         $this->db->where('date_of_birth =', $date_of_birth);
         $this->db->where('date_of_join =', $date_of_join);
-        $this->db->where('mobile_number =', $mobile_number);
+        if($mobile_number)
+        {
+            $this->db->where('mobile_number =', $mobile_number);
+        }     
         $this->db->where('status =', 1);
         $query = $this->db->get();
         return $query->result();

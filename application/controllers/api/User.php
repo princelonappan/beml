@@ -38,7 +38,7 @@ class User extends REST_Controller
         if (!empty($employee_id) && !empty($date_of_birth) && !empty($date_of_join)
                 && !empty($mobile_number))
         {
-            $user_details = $this->User_model->get_user_by_employee_details($employee_id, $date_of_birth, $date_of_join, $mobile_number);
+            $user_details = $this->User_model->get_user_by_employee_details($employee_id, $date_of_birth, $date_of_join);
             if (!empty($user_details) && !empty($user_details[0]))
             {
                 $user_details = $user_details[0];
@@ -47,7 +47,7 @@ class User extends REST_Controller
                 if ($is_registered == 1)
                 {
                     $this->response(array('result_code' => 202, 'result_title' => 'Error',
-                        'result_string' => 'Already a user'));
+                        'result_string' => 'Already user signuped'));
                 }
                 else
                 {
@@ -166,23 +166,24 @@ class User extends REST_Controller
     public function verify_otp_post()
     {
         $key = $this->rest->key;
+        $employee_id = $this->post('employee_id');
         $mobile_number = $this->post('mobile_number');
         $otp = $this->post('otp');
         $type = $this->post('type');
-        if (!empty($mobile_number) && !empty($otp) && !empty($type))
+        if (!empty($mobile_number) && !empty($otp) && !empty($type) && !empty($employee_id))
         {
             $otp_details = $this->Otp_authentication_model->get_otp_details($mobile_number, $otp, $type, true);
             if (isset($otp_details['0']) && !empty($otp_details['0']))
             {
                 $otp_details = $otp_details['0'];
-                $user_details = $this->User_model->get_user_by_mobile_id($mobile_number);
-                $$otp_details_id = $otp_details->id;
+                $user_details = $this->User_model->get_user_by_employee_id($employee_id);
+                $otp_details_id = $otp_details->id;
                 if (isset($user_details['0']) && !empty($user_details['0']))
                 {
                     $user = $user_details['0'];
                     $user_id = $user->id;
                     $update_otp_data['is_verified'] = 1;
-                    $this->Otp_authentication_model->update_otp_details($$otp_details_id, $update_otp_data);
+                    $this->Otp_authentication_model->update_otp_details($otp_details_id, $update_otp_data);
                     //If the type is signup, then updating the session with current user id.
                     if ($type == 1)
                     {
@@ -195,7 +196,9 @@ class User extends REST_Controller
                         }
                         else
                             unset($user->user_profile_image);
-
+                        $user_update_data['is_registered'] = 1;
+                        $user_update_data['mobile_number'] = $mobile_number;
+                        $this->User_model->update_users_details($user_id, $user_update_data);
                         $this->response(array('result_code' => 200, 'result_title' => 'Success',
                             'result_title' => 'Successfully verified the mobile number.','user' => $user, 'type' => $type));
                     }
@@ -224,7 +227,7 @@ class User extends REST_Controller
         }
         else
         {
-            $this->response(array('result_code' => 400, 'result_title' => 'Error', 'result_string' => 'Please provide user details.'));
+            $this->response(array('result_code' => 400, 'result_title' => 'Error', 'result_string' => 'Please provide valid details.'));
         }
     }
     

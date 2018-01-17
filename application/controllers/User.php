@@ -11,6 +11,7 @@ class User extends Front_Controller
         parent::__construct();
         $this->load->library('session');
         $this->load->model('User_model');
+        $this->load->helper('url');
     }
 
     public function index()
@@ -42,17 +43,17 @@ class User extends Front_Controller
                 $user_details['created_date'] = $user_details['modified_date'] = get_current_datetime();
                 $this->User_model->save_user_details($user_details);
                 $this->session->set_flashdata('message', 'Created the user details.');
-                header("Location:/user/create");
+                redirect("/user/create");
             }
             else
             {
                 $this->session->set_flashdata('message', 'Already employee id is taken.');
-                header("Location:/user/create");
+                redirect("/user/create");
             }
         }
         else
         {
-            header("Location:/user");
+            redirect("/user");
         }
     }
 
@@ -65,11 +66,11 @@ class User extends Front_Controller
                 'status' => $status);
 
             $user_details = $this->User_model->update_users_details($id, $user_details);
-            header("Location:/user");
+            redirect("/user");
         }
         else
         {
-            header("Location:/user");
+            redirect("/user");
         }
     }
 }

@@ -101,11 +101,11 @@ class Post extends Front_Controller
         if(isset($id) && !empty($id)) 
         {
             $this->Post_model->delete_post($id);
-            header("Location:/post");
+            redirect('/post');
         }
         else
         {
-            header("Location:/post");
+            redirect('/post');
         }
     }
     
@@ -120,7 +120,7 @@ class Post extends Front_Controller
         }
         else
         {
-            header("Location:/post");
+            redirect('/post');
         }
     }
     
@@ -171,7 +171,7 @@ class Post extends Front_Controller
         }
         else
         {
-            header("Location:/post");
+            redirect('/post');
         }
     }
     
@@ -181,11 +181,11 @@ class Post extends Front_Controller
         {
             $update_data['status'] = $status;
             $this->Post_comments_model->updated_post_comment($id, $update_data);
-            header("Location:/post/view_comments/".$post_id);
+            redirect("post/view_comments/".$post_id);
         }
         else
         {
-            header("Location:/post");
+            redirect('/post');
         }
     }
 }

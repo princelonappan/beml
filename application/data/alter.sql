@@ -45,3 +45,6 @@ ALTER TABLE `otp_authentication` CHANGE `otp` `otp` VARCHAR(8) NOT NULL;
 ALTER TABLE `otp_authentication` ADD `message_response` TEXT NULL AFTER `type`;
 ALTER TABLE `users` ADD `reset_password_token` VARCHAR(120) NULL AFTER `is_registered`;
 ALTER TABLE `otp_authentication` CHANGE `is_verified` `is_verified` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '1 - Yes 0 - No';
+
+
+ALTER TABLE `otp_authentication` ADD `employee_id` VARCHAR(255) NULL AFTER `mobile_number`;

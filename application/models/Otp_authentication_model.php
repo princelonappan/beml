@@ -22,6 +22,21 @@ Class Otp_authentication_model extends CI_Model
         return $query->result();
     }
     
+    function get_otp_details_by_employee_id($employee_id, $otp, $type, $is_verified_condition = false)
+    {
+        $this->db->select('*');
+        $this->db->from('otp_authentication');
+        $this->db->where('employee_id =', $employee_id);
+        $this->db->where('otp =', $otp);
+        $this->db->where('type =', $type);
+        if($is_verified_condition == true)
+        {
+            $this->db->where('is_verified =', 0);
+        }
+        $query = $this->db->get();
+        return $query->result();
+    }
+    
     public function save_otp($otp_details)
     {
         $this->db->set($otp_details);

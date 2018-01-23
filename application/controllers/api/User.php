@@ -67,7 +67,7 @@ class User extends REST_Controller
                             unset($user_details->user_profile_image);
 
                         //sending the otp token to the mobile number.
-                        $response = send_otp($mobile_number, 1);
+                        $response = send_otp($mobile_number, 1, $employee_id);
                         if($response['success'] == true)
                         {
                             $this->response(array('result_code' => 200, 'result_title' => 'Successfully sent the OTP to the mobile number.',
@@ -148,8 +148,9 @@ class User extends REST_Controller
             if (isset($user_details['0']) && !empty($user_details['0']))
             {
                 $user = $user_details['0'];
+                $employee_id = $user->employee_id;
                 //sending the otp number to the mobile number
-                $response = send_otp($mobile_number, $type);
+                $response = send_otp($mobile_number, $type, $employee_id);
                 if ($response['success'] == true)
                 {
                     $this->response(array('result_code' => 200, 'result_title' => 'Successfully sent the OTP to the mobile number.',
@@ -176,17 +177,17 @@ class User extends REST_Controller
     {
         $key = $this->rest->key;
         $employee_id = $this->post('employee_id');
-        $mobile_number = $this->post('mobile_number');
         $otp = $this->post('otp');
         $type = $this->post('type');
-        if (!empty($mobile_number) && !empty($otp) && !empty($type) && !empty($employee_id))
+        if (!empty($otp) && !empty($type) && !empty($employee_id))
         {
-            $otp_details = $this->Otp_authentication_model->get_otp_details($mobile_number, $otp, $type, true);
+            $otp_details = $this->Otp_authentication_model->get_otp_details_by_employee_id($employee_id, $otp, $type, true);
             if (isset($otp_details['0']) && !empty($otp_details['0']))
             {
                 $otp_details = $otp_details['0'];
                 $user_details = $this->User_model->get_user_by_employee_id($employee_id);
                 $otp_details_id = $otp_details->id;
+                $mobile_number = $otp_details->mobile_number;
                 if (isset($user_details['0']) && !empty($user_details['0']))
                 {
                     $user = $user_details['0'];
@@ -277,26 +278,34 @@ class User extends REST_Controller
     public function forgot_password_post()
     {
         $employee_id = $this->post('employee_id');
-        $date_of_birth = $this->post('date_of_birth');
-        $date_of_join = $this->post('date_of_join');
-        if (!empty($employee_id) && !empty($date_of_birth) && !empty($date_of_join))
+        if (!empty($employee_id))
         {
-            $user_details = $this->User_model->get_user_by_employee_details($employee_id, $date_of_birth, $date_of_join);
+            $user_details = $this->User_model->get_user_by_employee_id($employee_id);
             if (!empty($user_details) && !empty($user_details[0]))
             {
                 $current_time = get_current_datetime();
-                $user_details = $user_details[0];
-                $user_id = $user_details->id;
-                $user_details = array(
-                    'name' => '',
-                    'password' => '',
-                    'modified_date' => $current_time,
-                    'is_registered' => 0
-                );
-
-                $user_details = $this->User_model->update_users_details($user_id, $user_details);
-                $user = $this->User_model->get_user_by_id($user_id);
-                $this->response(array('result_code' => 200, 'result_title' => 'Success', 'result_string' => 'Successfully updated the user details.'));
+                $user = $user_details['0'];
+                $user_id = $user->id;
+                $mobile_number = $user->mobile_number;
+                if($mobile_number)
+                {
+                    //sending the otp number to the mobile number
+                    $response = send_otp($mobile_number, 2, $employee_id);
+                    if ($response['success'] == true)
+                    {
+                        $this->response(array('result_code' => 200, 'result_title' => 'Successfully sent the OTP to the mobile number.',
+                            'result_string' => 'Success'));
+                    }
+                    else
+                    {
+                        $this->response(array('result_code' => 400, 'result_title' => 'Error',
+                            'result_string' => 'Error occured while sending the OTP. Please try after sometime.'));
+                    }
+                } 
+                else 
+                {
+                    $this->response(array('result_code' => 400, 'result_title' => 'Error', 'result_string' => 'Employee ID is not linked with mobile number.'));
+                }
             }
             else
             {

@@ -38,43 +38,52 @@ class User extends REST_Controller
         if (!empty($employee_id) && !empty($date_of_birth) && !empty($date_of_join)
                 && !empty($mobile_number))
         {
-            $user_details = $this->User_model->get_user_by_employee_details($employee_id, $date_of_birth, $date_of_join);
-            if (!empty($user_details) && !empty($user_details[0]))
+            $is_mobile_number_exists = $this->User_model->get_user_by_mobile_id($mobile_number);
+            if(!empty($is_mobile_number_exists))
             {
-                $user_details = $user_details[0];
-                $user_id = $user_details->id;
-                $is_registered = $user_details->is_registered;
-                if ($is_registered == 1)
-                {
-                    $this->response(array('result_code' => 202, 'result_title' => 'Error',
-                        'result_string' => 'Already user signuped'));
-                }
-                else
-                {
-                    if ($user_details->user_profile_image && !empty($user_details->user_profile_image))
-                    {
-                        $user_details->user_profile_image = base_url() . 'uploads/user_profile_images/' . $user_details->user_profile_image;
-                    }
-                    else
-                        unset($user_details->user_profile_image);
-                    
-                    //sending the otp token to the mobile number.
-                    $response = send_otp($mobile_number, 1);
-                    if($response['success'] == true)
-                    {
-                        $this->response(array('result_code' => 200, 'result_title' => 'Successfully sent the OTP to the mobile number.',
-                        'result_string' => 'Success', 'user' => $user_details));
-                    }
-                    else 
-                    {
-                        $this->response(array('result_code' => 400, 'result_title' => 'Error',
-                        'result_string' => 'Error occured while sending the OTP. Please try after sometime.'));
-                    }
-                }
+                $this->response(array('result_code' => 202, 'result_title' => 'Error',
+                            'result_string' => 'This number is already linked with another employee ID.'));
             }
             else
             {
-                $this->response(array('result_code' => 400, 'result_title' => 'Error', 'result_string' => 'Invalid employee details.'));
+                $user_details = $this->User_model->get_user_by_employee_details($employee_id, $date_of_birth, $date_of_join);
+                if (!empty($user_details) && !empty($user_details[0]))
+                {
+                    $user_details = $user_details[0];
+                    $user_id = $user_details->id;
+                    $is_registered = $user_details->is_registered;
+                    if ($is_registered == 1)
+                    {
+                        $this->response(array('result_code' => 202, 'result_title' => 'Error',
+                            'result_string' => 'Already user signuped'));
+                    }
+                    else
+                    {
+                        if ($user_details->user_profile_image && !empty($user_details->user_profile_image))
+                        {
+                            $user_details->user_profile_image = base_url() . 'uploads/user_profile_images/' . $user_details->user_profile_image;
+                        }
+                        else
+                            unset($user_details->user_profile_image);
+
+                        //sending the otp token to the mobile number.
+                        $response = send_otp($mobile_number, 1);
+                        if($response['success'] == true)
+                        {
+                            $this->response(array('result_code' => 200, 'result_title' => 'Successfully sent the OTP to the mobile number.',
+                            'result_string' => 'Success', 'user' => $user_details));
+                        }
+                        else 
+                        {
+                            $this->response(array('result_code' => 400, 'result_title' => 'Error',
+                            'result_string' => 'Error occured while sending the OTP. Please try after sometime.'));
+                        }
+                    }
+                }
+                else
+                {
+                    $this->response(array('result_code' => 400, 'result_title' => 'Error', 'result_string' => 'Invalid employee details.'));
+                }
             }
         }
         else

@@ -52,11 +52,11 @@ Class User_model extends CI_Model
         return $query->result();
     }
     
-    public function get_user_by_mobile_id($employee_id)
+    public function get_user_by_mobile_id($mobile_number)
     {
         $this->db->select('*');
         $this->db->from('users');
-        $this->db->where('mobile_number =', $employee_id);
+        $this->db->where('mobile_number =', $mobile_number);
         $query = $this->db->get();
         return $query->result();
     }

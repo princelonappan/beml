@@ -245,19 +245,19 @@ function send_otp($mobile_number, $type, $employee_id = NULL)
 
     try
     {
-//        $response = $Textlocal->sendSms($numbers, $message, $sender);
-//        if (isset($response) && !empty($response) && isset($response->status) && $response->status == 'success')
-//        {
+        $response = $Textlocal->sendSms($numbers, $message, $sender);
+        if (isset($response) && !empty($response) && isset($response->status) && $response->status == 'success')
+        {
             $otp_authentication_details['message_response'] = json_encode($response);
             //Deleting the previous otp entries
             $CI->Otp_authentication_model->delete_previous_otp_entries($mobile_number, $type);
             $CI->Otp_authentication_model->save_otp($otp_authentication_details);
             return array('success' => true);
-//        }
-//        else
-//        {
-//            return array('success' => false);
-//        }
+        }
+        else
+        {
+            return array('success' => false);
+        }
     } catch (Exception $ex)
     {
         return array('success' => false);

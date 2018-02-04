@@ -360,45 +360,44 @@ class User extends REST_Controller
     public function update_user_profile_post()
     {
         $user_id = $this->post('user_id');
-        if (!empty($user_id))
+        $name = $this->post('name');
+        $email = $this->post('email');
+        if (!empty($user_id) && !empty($name) && !empty($email))
         {
-            $name = $this->post('name');
-            $password = $this->post('password');
-            $confirm_password = $this->post('confirm_password');
-
             $user_data = $user_details = array();
             $current_time = get_current_datetime();
-            if (!empty($name) && !empty($confirm_password))
-            {
-                if ($password == $confirm_password)
-                {
-                    $user_details = array(
-                        'name' => $name,
-                        'password' => md5($password),
-                        'modified_date' => $current_time,
-                        'is_registered' => 1
-                    );
+            $user_details = array(
+                'name' => $name,
+                'modified_date' => $current_time,
+                'email' => $email
+            );
 
-                    $user_details = $this->User_model->update_users_details($user_id, $user_details);
-                    $user = $this->User_model->get_user_by_id($user_id);
-                    $user = $user[0];
-                    if ($user->user_profile_image && !empty($user->user_profile_image))
-                    {
-                        $user->user_profile_image = base_url() . 'uploads/user_profile_images/' . $user->user_profile_image;
-                    }
-                    else
-                        unset($user->user_profile_image);
-                    $this->response(array('result_code' => 200, 'result_title' => 'Success', 'user' => $user, 'result_string' => 'Successfully updated the user details.'));
-                }
-                else
+            if ($_FILES['user_image'] && !empty($_FILES['user_image']))
+            {
+                $path = $_FILES['user_image']['name'];
+                $ext = pathinfo($path, PATHINFO_EXTENSION);
+                $uploaddir = './uploads/user_profile_images/';
+                $user_img = time() . rand() . '.' . $ext;
+                $uploadfile = $uploaddir . $user_img;
+
+                if (move_uploaded_file($_FILES['user_image']['tmp_name'], $uploadfile))
                 {
-                    $this->response(array('result_code' => 400, 'result_title' => 'Error', 'result_string' => 'Please enter the same value for the password.'));
+                    $user_details = array_merge($user_details, array(
+                        'user_profile_image' => $user_img
+                    ));
                 }
+            }
+
+            $user_details = $this->User_model->update_users_details($user_id, $user_details);
+            $user = $this->User_model->get_user_by_id($user_id);
+            $user = $user[0];
+            if ($user->user_profile_image && !empty($user->user_profile_image))
+            {
+                $user->user_profile_image = base_url() . 'uploads/user_profile_images/' . $user->user_profile_image;
             }
             else
-            {
-                $this->response(array('result_code' => 400, 'result_title' => 'Error', 'result_string' => 'Please provide user details.'));
-            }
+                unset($user->user_profile_image);
+            $this->response(array('result_code' => 200, 'result_title' => 'Success', 'user' => $user, 'result_string' => 'Successfully updated the user details.'));
         }
         else
         {

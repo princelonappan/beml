@@ -50,3 +50,4 @@ ALTER TABLE `otp_authentication` CHANGE `is_verified` `is_verified` TINYINT(4) N
 ALTER TABLE `otp_authentication` ADD `employee_id` VARCHAR(255) NULL AFTER `mobile_number`;
 
 ALTER TABLE `like` ADD `like_type` INT(4) NULL AFTER `liked_by`;
+ALTER TABLE `users` ADD `email` VARCHAR(155) NULL AFTER `name`;

@@ -41,7 +41,7 @@ Class Post_comments_model extends CI_Model
         $this->db->select('*, post_comments.created_date as post_commented_date,'
                 . 'post_comments.id as post_comment_id,post_comments.status as post_comment_status');
         $this->db->from('post_comments');
-        $this->db->join('users as u','post_comments.user_id = u.id');
+        $this->db->join('users as u','post_comments.user_id = u.id', 'left');
         $this->db->where('post_comments.post_id', $post_id);
         $this->db->order_by("post_comments.created_date", "desc"); 
         $query = $this->db->get();

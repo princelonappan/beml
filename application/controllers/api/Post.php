@@ -35,10 +35,12 @@ class Post extends REST_Controller
     {
         $post_id = $this->post('post_id');
         $user_id = $this->post('user_id');
-        if (!empty($post_id) && !empty($user_id))
+        $like_type = $this->post('like_type');
+        if (!empty($post_id) && !empty($user_id) && !empty($like_type))
         {
             $data['post_id'] = $post_id;
             $data['liked_by'] = $user_id;
+            $data['like_type'] = $like_type;
             $data['created'] = get_current_datetime();
             $data['ip'] = get_ip_address();
             $like_details = $this->Like_model->get_like_details($user_id, $post_id);

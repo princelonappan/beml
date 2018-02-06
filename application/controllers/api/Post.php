@@ -54,8 +54,27 @@ class Post extends REST_Controller
                     if (!empty($response) && !empty($response))
                     {
                         $like_count = $post->like_count;
-                        $new_count = $like_count + 1;
-                        $update_data['like_count'] = $new_count;
+                        $like_total_count_value = $post->like_total_count;
+                        $like_count = json_decode($like_count, true);
+                        if(empty($like_count))
+                        {
+                            $like_count[$like_type] = 1;
+                        }
+                        else 
+                        {
+                            if(array_key_exists($like_type, $like_count)) 
+                            {
+                                $like_total_count = $like_count[$like_type];
+                                $like_count[$like_type] = $like_total_count + 1;
+                            }
+                            else 
+                            {
+                                $like_count[$like_type] = 1;
+                            }
+                        }
+
+                        $update_data['like_count'] = json_encode($like_count);
+                        $update_data['like_total_count'] = $like_total_count_value + 1;
                         $this->Post_model->update_post_details($post_id, $update_data);
                         $this->response(array('result_code' => 200, 'result_title' => 'Success',
                             'result_string' => 'Successfully updated the details'));
@@ -92,8 +111,9 @@ class Post extends REST_Controller
             $data['created'] = get_current_datetime();
             $data['ip'] = get_ip_address();
             $like_details = $this->Like_model->get_like_details($user_id, $post_id);
-            if (!empty($like_details))
-            {
+            if (!empty($like_details) && isset($like_details[0]))
+            { 
+                $like_type = $like_details[0]->like_type;
                 $response = $this->Like_model->unlike_post($post_id, $user_id);
                 $post = $this->Post_model->get_post_by_id($post_id);
                 if (isset($post) && isset($post[0]))
@@ -102,8 +122,27 @@ class Post extends REST_Controller
                     if (!empty($response) && !empty($response))
                     {
                         $like_count = $post->like_count;
-                        $new_count = $like_count - 1;
-                        $update_data['like_count'] = $new_count;
+                        $like_count = json_decode($like_count, true);
+                        $like_total_count_value = $post->like_total_count;
+                        if(empty($like_count))
+                        {
+                            $like_count = array();
+                        }
+                        else 
+                        {
+                            if(array_key_exists($like_type, $like_count)) 
+                            {
+                                $like_total_count = $like_count[$like_type];
+                                if($like_total_count > 0)
+                                    $like_count[$like_type] = $like_total_count - 1;
+                            }
+                        }
+
+                        $update_data['like_count'] = json_encode($like_count);
+                        if($like_total_count_value > 0)
+                        {
+                            $update_data['like_total_count'] = $like_total_count_value - 1;
+                        }
                         $this->Post_model->update_post_details($post_id, $update_data);
                         $this->response(array('result_code' => 200, 'result_title' => 'Success',
                             'result_string' => 'Successfully updated the details'));
@@ -262,7 +301,7 @@ class Post extends REST_Controller
             $pagination_limit = $this->config->item('pagination_limit');
             $offset = $this->input->get('offset');
             $posts = $this->Post_model->get_post_by_category($category_id, $pagination_limit, $offset);
-            $post_details = format_post($posts, $user_id, false);
+            $post_details = format_post($posts, $user_id);
             if ($post_details && !empty($post_details))
             {
                 $this->response(array('result_code' => 200, 'result_title' => 'Success',

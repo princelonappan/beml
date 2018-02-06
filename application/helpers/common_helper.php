@@ -140,7 +140,7 @@ function format_date($date, $format='Y-m-d H:i:s')
     return $now->format($format);
 }
 
-function format_post($posts, $user_id, $is_favourite = false)
+function format_post($posts, $user_id)
 {
     $CI = & get_instance();
     $post_details = array();
@@ -152,7 +152,8 @@ function format_post($posts, $user_id, $is_favourite = false)
         $post_details[$i]['post_id'] = $post_id = $post['post_id'];
         $post_details[$i]['title'] = $post['title'];
         $post_details[$i]['body'] = $post['body'];
-        $post_details[$i]['like_count'] = $post['like_count'];
+        $post_details[$i]['like_type_count'] = json_decode($post['like_count'], true);
+        $post_details[$i]['like_total_count'] = $post['like_total_count'];
         $post_details[$i]['is_share'] = $post['is_share'];
         if($post['media_type'] && $post['media_type'] == 6)
         {
@@ -164,22 +165,16 @@ function format_post($posts, $user_id, $is_favourite = false)
             $post_details[$i]['media_url'] = $post['media_url'];
             $post_details[$i]['media_type'] = $post['media_type'];
         }
-        if($is_favourite == true)
-            $post_details[$i]['is_favourited'] = 1;
-        else
-        {
-            $favourite_details = $CI->Favourite_model->get_favourite_details($user_id, $post_id);
-            if(empty($favourite_details))
-                $post_details[$i]['is_favourited'] = 0;
-            else
-                $post_details[$i]['is_favourited'] = 1;
-        }
         
         $like_details = $CI->Like_model->get_like_details($user_id, $post_id);
         if(empty($like_details))
             $post_details[$i]['is_liked'] = 0;
         else
+        {
             $post_details[$i]['is_liked'] = 1;
+            $post_details[$i]['liked_type'] = $like_details[0]->like_type;;
+        }
+            
         
         $post_details[$i]['comment_count'] = $post['comment_count'];
         $post_details[$i]['category_id'] = $post['cat_id'];
@@ -260,8 +255,6 @@ function send_otp($mobile_number, $type, $employee_id = NULL)
         }
     } catch (Exception $ex)
     {
-        echo $ex->getMessage();
-        exit;
         return array('success' => false);
     }
 }

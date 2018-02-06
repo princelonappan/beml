@@ -51,3 +51,8 @@ ALTER TABLE `otp_authentication` ADD `employee_id` VARCHAR(255) NULL AFTER `mobi
 
 ALTER TABLE `like` ADD `like_type` INT(4) NULL AFTER `liked_by`;
 ALTER TABLE `users` ADD `email` VARCHAR(155) NULL AFTER `name`;
+
+ALTER TABLE `post` CHANGE `like_count` `like_count` TEXT NULL;
+ALTER TABLE `post` CHANGE `like_count` `like_count` TEXT CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL COMMENT 'json format for each like type ';
+UPDATE `post` SET `like_count` = NULL;
+ALTER TABLE `post` ADD `like_total_count` TINYINT(5) NOT NULL DEFAULT '0' AFTER `like_count`;

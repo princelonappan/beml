@@ -8,4 +8,4 @@
 
 $config['pagination_limit']= '10';
 $config['textlocal_api_key']= 'cDkmM4avhTA-KMxvOCaS4B4XHBthodM8zjn7mpQ6Q4';
-$config['sms_title']= 'TXTLCL';
+$config['sms_title']= 'BMLFST';

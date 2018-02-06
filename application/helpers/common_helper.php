@@ -239,9 +239,9 @@ function send_otp($mobile_number, $type, $employee_id = NULL)
     $numbers = array($mobile_number);
     $sender = $textlocal_sender;
     if($type == 1)
-        $message = 'Your OTP Pin is '.$otp.'. Enter this pin to activate your account.';
+        $message = $otp.' - Use this secure code in BEML First app to continue.';
     else
-        $message = 'Your OTP Pin is '.$otp.'. Enter this pin to set a new password for your account.';
+        $message = 'Your BEML First secure code is '.$otp.'. Enter this pin to set a new password for your account.';
 
     try
     {
@@ -260,6 +260,8 @@ function send_otp($mobile_number, $type, $employee_id = NULL)
         }
     } catch (Exception $ex)
     {
+        echo $ex->getMessage();
+        exit;
         return array('success' => false);
     }
 }

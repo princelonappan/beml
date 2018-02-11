@@ -72,6 +72,7 @@ Class Post_model extends CI_Model
         $this->db->select('*, a.id as cat_id, post.id as post_id, a.category_name as category_name, post.created_date as post_created_date');
         $this->db->from('post');
         $this->db->join('post_category as a','post.category_id = a.id');
+        $this->db->join('users as us','post.created_by = us.id');
         $this->db->where('post.category_id', $category_id);
         $this->db->order_by("post.created_date", "desc"); 
         $this->db->limit($pagination_limit, $limit);

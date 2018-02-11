@@ -56,3 +56,6 @@ ALTER TABLE `post` CHANGE `like_count` `like_count` TEXT NULL;
 ALTER TABLE `post` CHANGE `like_count` `like_count` TEXT CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL COMMENT 'json format for each like type ';
 UPDATE `post` SET `like_count` = NULL;
 ALTER TABLE `post` ADD `like_total_count` TINYINT(5) NOT NULL DEFAULT '0' AFTER `like_count`;
+
+ALTER TABLE `post` ADD `created_by` INT NULL AFTER `created_date`;
+UPDATE post set created_by = '3';

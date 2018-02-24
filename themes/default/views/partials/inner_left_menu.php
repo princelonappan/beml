@@ -37,6 +37,14 @@
 						</a>
 					</li>
                                         
+                                        <?php
+                                        if($this->session->userdata('user')['is_admin_user'] == '1' &&
+                                              ($this->session->userdata('user')['admin_role'] == $this->config->item('super_admin_role') ||
+                                                 $this->session->userdata('user')['admin_role'] == $this->config->item('user_admin_role')))
+                                        {
+                                        
+                                        ?>
+                                        
                                         <li>
 						<a href="/student" class="dropdown-toggle">
 							<i class="icon-user"></i>
@@ -61,6 +69,11 @@
 						
 						</ul>
 					</li>
+                                        <?php } 
+                                        if($this->session->userdata('user')['is_admin_user'] == '1' &&
+                                              ($this->session->userdata('user')['admin_role'] == $this->config->item('super_admin_role') ||
+                                                 $this->session->userdata('user')['admin_role'] == $this->config->item('post_admin_role')))
+                                        { ?>
                                         
                                          <li>
 						<a href="/student" class="dropdown-toggle">
@@ -87,6 +100,8 @@
 						
 						</ul>
 					</li>
+                                        
+                                        <?php } ?>
 																													
 				</ul><!--/.nav-list-->
 

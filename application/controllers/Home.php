@@ -11,7 +11,7 @@ class Home extends MY_Controller
 
         parent::__construct();
         $this->load->helper('form');
-        $this->load->model('admin_model');
+        $this->load->model('User_model');
         $this->load->library('session');
     }
 
@@ -19,7 +19,12 @@ class Home extends MY_Controller
     {
         if ($this->session->userdata('user'))
         {
-            redirect($this->config->base_url().'user');
+            if($this->session->userdata('user')['admin_role'] == $this->config->item('super_admin_role')
+                    || $this->session->userdata('user')['admin_role'] == $this->config->item('user_admin_role')) {
+                redirect($this->config->base_url().'user');
+            } else {
+                redirect($this->config->base_url().'post');
+            }
         }
         else
         {
@@ -57,18 +62,31 @@ class Home extends MY_Controller
         $username = $this->input->post('username');
 
         //query the database
-        $result = $this->admin_model->login($username, $password);
+        $result = $this->User_model->login($username, $password);
 
         if ($result)
         {
             $sess_array = array();
+            $admin_roles = $this->config->item('admin_roles');
             foreach ($result as $row)
             {
-                $sess_array = array(
-                    'user_id' => $row->id,
-                    'username' => $row->email
-                );
-                $this->session->set_userdata('user', $sess_array);
+                if (in_array($row->is_admin_user, $admin_roles) &&
+                        $row->is_admin_user == $this->config->item('is_admin_user') &&
+                        $row->status == 1)
+                {
+                    $sess_array = array(
+                        'user_id' => $row->id,
+                        'username' => $row->email,
+                        'is_admin_user' => $row->is_admin_user,
+                        'admin_role' => $row->admin_role  
+                    );
+                    $this->session->set_userdata('user', $sess_array);
+                }
+                else
+                {
+                    $this->form_validation->set_message('check_database', 'Invalid username or password');
+                    return false;
+                }
             }
             return TRUE;
         }

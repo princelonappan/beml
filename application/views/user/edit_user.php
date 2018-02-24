@@ -1,5 +1,3 @@
-
-
 <div class="main-content">
     <div class="breadcrumbs" id="breadcrumbs">
         <ul class="breadcrumb">
@@ -18,7 +16,7 @@
     <div class="page-content">
         <div class="page-header position-relative">
             <h1>
-                Employee
+                Edit Employee
             </h1>
         </div><!--/.page-header-->
 
@@ -26,7 +24,7 @@
             <div class="span12">
                 <!--PAGE CONTENT BEGINS-->
 
-                <form class="form-horizontal style-form" id="validation-form" method="POST" action="<?php echo $this->config->base_url(); ?>user/save_details" enctype="multipart/form-data">
+                <form class="form-horizontal style-form" id="validation-form" method="POST" action="<?php echo $this->config->base_url(); ?>user/update_details" enctype="multipart/form-data">
                     <div class="step-content row-fluid position-relative" id="step-container">
                         <?php if (!empty($this->session->flashdata('message')))
                         { ?>
@@ -35,33 +33,49 @@
                                 echo $message;
                                 ?>
                             </div>
-<?php } ?>
+<?php } 
+?>
                         <div class="active" >
                             <div class="control-group">
                                 <label class="control-label" for="employee_id">Employee Id</label>
                                 <div class="controls">
                                     <div class="span12">
-                                        <input type="text" name="employee_id" id="employee_id" class="span6" required="required"/>
+                                        <input type="text" value="<?php echo $user_details->employee_id; ?>" name="employee_id" id="employee_id" class="span6" readonly="readonly"/>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        <input type="hidden" name="user_id" value="<?php echo $user_details->id; ?>" />
+                        <?php if(isset($user_details->name) && !empty($user_details->name)) { ?>
+                        <div class="active" >
+                            <div class="control-group">
+                                <label class="control-label" for="dob">Name</label>
+                                <div class="controls">
+                                    <div class="span12">
+                                        <input type="text" name="dob" value="<?php echo $user_details->name; ?>" id="dob" class="span6" readonly="readonly" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <?php } ?>
+                        
                         <div class="active" >
                             <div class="control-group">
                                 <label class="control-label" for="dob">Date Of Birth</label>
                                 <div class="controls">
                                     <div class="span12">
-                                        <input type="text" name="dob" id="dob" class="span6" required="required"/>
+                                        <input type="text" name="dob" value="<?php echo $user_details->date_of_birth; ?>" id="dob" class="span6" readonly="readonly" />
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        
                         <div class="active">
                             <div class="control-group">
                                 <label class="control-label" for="doj">Date Of Join</label>
                                 <div class="controls">
                                     <div class="span12">
-                                        <input type="text" name="doj" id="doj" class="span6" required="required"/>
+                                        <input type="text" name="doj" value="<?php echo $user_details->date_of_join; ?>" id="doj" class="span6" readonly="readonly" />
                                     </div>
                                 </div>
                             </div>
@@ -72,13 +86,34 @@
                             <div class="controls">
                                 <span class="span12">
                                     <label class="blue" style="display: inline;">
-                                        <input name="can_post_manage" value="1" type="radio" checked="checked" />
+                                        <input name="can_post_manage" value="1" type="radio" 
+                                               <?php echo $user_details->is_comment_share_post == 1 ? 'checked=checked' : ''; ?> />
                                         <span class="lbl">Yes</span>
                                     </label>
 
                                     <label class="blue" style="display: inline;padding-left: 5px;">
-                                        <input name="can_post_manage" value="2" type="radio"  />
+                                        <input name="can_post_manage" value="2" type="radio"
+                                               <?php echo $user_details->is_comment_share_post == 2 ? 'checked=checked' : ''; ?> />
                                         <span class="lbl">No</span>
+                                    </label>
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div class="control-group">
+                            <label class="control-label" for="email">Status?</label>
+                            <div class="controls">
+                                <span class="span12">
+                                    <label class="blue" style="display: inline;">
+                                        <input name="status" value="1" type="radio" 
+                                            <?php echo $user_details->status == 1 ? 'checked=checked' : ''; ?> />
+                                        <span class="lbl">Active</span>
+                                    </label>
+
+                                    <label class="blue" style="display: inline;padding-left: 5px;">
+                                        <input name="status" value="2" type="radio" 
+                                               <?php echo $user_details->status == 2 ? 'checked=checked' : ''; ?>/>
+                                        <span class="lbl">Deactivate</span>
                                     </label>
                                 </span>
                             </div>
@@ -89,34 +124,37 @@
                             <div class="controls">
                                 <span class="span12">
                                     <label class="blue" style="display: inline;">
-                                        <input name="is_admin_user" value="1" type="radio" checked="checked" />
+                                        <input name="is_admin_user" value="1" type="radio" <?php echo $user_details->is_admin_user == 1 ? 'checked=checked' : ''; ?> />
                                         <span class="lbl">Yes</span>
                                     </label>
 
                                     <label class="blue" style="display: inline;padding-left: 5px;">
-                                        <input name="is_admin_user" value="2" type="radio"  />
+                                        <input name="is_admin_user" value="2" type="radio" 
+                                               <?php echo $user_details->is_admin_user == 0 ? 'checked=checked' : ''; ?> />
                                         <span class="lbl">No</span>
                                     </label>
                                 </span>
                             </div>
                         </div>
 
-                        <div class="active admin_div">
+                        <div class="active admin_div"
+                             style="<?php echo $user_details->is_admin_user != 1 ? 'display:none' : ''; ?>">
                             <div class="control-group">
                                 <label class="control-label" for="dob">User Role</label>
                                 <div class="controls">
                                     <div class="span12">
                                         <select name="admin_role">
-                                            <option value="1">Super Admin</option>
-                                            <option value="2">Post Management Admin</option>
-                                            <option value="3">User Management Admin</option>
+                                            <option value="1" <?php echo $user_details->admin_role == $this->config->item('super_admin_role') ? 'checked=checked' : ''; ?>>Super Admin</option>
+                                            <option value="2" <?php echo $user_details->admin_role == $this->config->item('super_admin_role') ? 'checked=checked' : ''; ?>>Post Management Admin</option>
+                                            <option value="3" <?php echo $user_details->admin_role == $this->config->item('super_admin_role') ? 'checked=checked' : ''; ?>>User Management Admin</option>
                                         </select>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         
-                        <div class="active admin_div" >
+                        <div class="active admin_div" 
+                             style="<?php echo $user_details->is_admin_user != 1 ? 'display:none' : ''; ?>">
                             <div class="control-group">
                                 <label class="control-label" for="dob"></label>
                                 <div class="controls">
@@ -129,38 +167,11 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        
-                        <div class="active admin_div" >
-                            <div class="control-group">
-                                <label class="control-label" for="dob">Password</label>
-                                <div class="controls">
-                                    <div class="span12">
-                                        <input type="password" name="password" id="password" class="span6" required="required"/>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="active admin_div" >
-                            <div class="control-group">
-                                <label class="control-label" for="dob"></label>
-                                <div class="controls">
-                                    <div class="span12">
-                                        <ul>
-                                            <li>This password can be used in the Mobile App login.</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                      
-                    </div>
-
+                        </div>            
                     <div class="form-actions">
                         <button class="btn btn-info" id="course_save" type="button">
                             <i class="icon-ok bigger-110"></i>
-                            Save
+                            Update
                         </button>
 
                         &nbsp; &nbsp; &nbsp;
@@ -184,8 +195,6 @@
 <script src="<?php echo base_url("assests/js/jquery.validate.min.js"); ?>"></script>
 <script type="text/javascript">
     $(function () {
-        $("#dob").datepicker();
-        $("#doj").datepicker();
         var media_type_value = $('input[type=radio][name=media_type]').val();
         $("#course_save").click(function () {
             if($('#validation-form').valid())

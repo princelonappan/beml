@@ -59,3 +59,9 @@ ALTER TABLE `post` ADD `like_total_count` TINYINT(5) NOT NULL DEFAULT '0' AFTER 
 
 ALTER TABLE `post` ADD `created_by` INT NULL AFTER `created_date`;
 UPDATE post set created_by = '3';
+
+ALTER TABLE `users` ADD `is_comment_share_post` TINYINT(2) NULL AFTER `email`, ADD `admin_role` TINYINT(2) NOT NULL DEFAULT '0' AFTER `is_comment_share_post`;
+ALTER TABLE `users` ADD `is_admin_user` TINYINT(2) NOT NULL AFTER `is_comment_share_post`;
+
+INSERT INTO `users` (`id`, `employee_id`, `mobile_number`, `name`, `email`, `is_comment_share_post`, `is_admin_user`, `admin_role`, `password`, `date_of_birth`, `date_of_join`, `user_profile_image`, `is_registered`, `reset_password_token`, `status`, `created_date`, `modified_date`) VALUES (NULL, NULL, NULL, NULL, 'princelonappan07@gmail.com', NULL, '1', '1', 'e10adc3949ba59abbe56e057f20f883e', NULL, NULL, NULL, '0', NULL, '1', '2018-02-18', '2018-02-18');
+ALTER TABLE `users` CHANGE `is_comment_share_post` `is_comment_share_post` TINYINT(2) NULL DEFAULT '1';

@@ -37,6 +37,7 @@
                         <table id="sample-table-2" class="table table-striped table-bordered table-hover">
                             <thead>
                                 <tr>
+                                    <th></th>
                                     <th>Comment</th>
                                     <th>Employee Id</th>
                                     <th>Created By</th>
@@ -48,11 +49,14 @@
 
                             <tbody>
                                 <?php      
+                                $i = 1;
                                 foreach ($comments as $comment)
                                 {
+                                    
                                     $status = $comment['post_comment_status'] == 1 ? 2 : 1;
                                     ?>
                                     <tr>
+                                        <td><?php echo $i; ?></td>
                                         <td><?php echo $comment['comment']; ?></td> 
                                         <td><?php echo $comment['employee_id']; ?></td> 
                                         <td><?php echo $comment['name']; ?></td>
@@ -61,8 +65,8 @@
 
                                         <td class="td-actions">
                                             <div class="hidden-phone visible-desktop action-buttons">
-                                                <a onclick="change_status_post(<?php echo $comment['post_comment_id']; ?>, <?php echo $status;?>, <?php echo $comment['post_id'];?>)"  name='view_post' class="green view_post" id ="<?php echo $comment['post_comment_id']; ?>" data-rel="tooltip" title="View Post">
-                                                    <i class="icon-eye-open bigger-130"></i>
+                                                <a onclick="change_status_post(<?php echo $comment['post_comment_id']; ?>, <?php echo $status;?>, <?php echo $comment['post_id'];?>)"  name='view_post' class="green view_post" id ="<?php echo $comment['post_comment_id']; ?>" data-rel="tooltip" title="Change Status">
+                                                    <i class="icon-pencil bigger-130"></i>
                                                 </a>                                             
                                             </div>
                                         </td>

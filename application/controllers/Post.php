@@ -17,16 +17,32 @@ class Post extends Front_Controller
 
     public function index()
     {
-        $data = array();
-        $data['posts'] = $this->Post_model->get_posts();
-        $this->template->build('/post/post_list', $data);
+        if ($this->session->userdata('user')['admin_role'] == $this->config->item('super_admin_role') ||
+                $this->session->userdata('user')['admin_role'] == $this->config->item('post_admin_role'))
+        {
+            $data = array();
+            $data['posts'] = $this->Post_model->get_posts();
+            $this->template->build('/post/post_list', $data);
+        }
+        else 
+        {
+            $this->template->build('/errors/access_error');
+        }
     }
     
     public function create()
     {
-        $catgories = $this->Post_category_model->get_categories();
-        $data['categories'] = $catgories;
-        $this->template->build('/post/create_post', $data);
+        if ($this->session->userdata('user')['admin_role'] == $this->config->item('super_admin_role') ||
+                $this->session->userdata('user')['admin_role'] == $this->config->item('post_admin_role'))
+        {
+            $catgories = $this->Post_category_model->get_categories();
+            $data['categories'] = $catgories;
+            $this->template->build('/post/create_post', $data);
+        }
+        else 
+        {
+            $this->template->build('/errors/access_error');
+        }
     }
     
     public function save_details()
@@ -98,30 +114,48 @@ class Post extends Front_Controller
     
     public function delete($id)
     {
-        if(isset($id) && !empty($id)) 
+        if ($this->session->userdata('user')['admin_role'] == $this->config->item('super_admin_role') ||
+                $this->session->userdata('user')['admin_role'] == $this->config->item('post_admin_role'))
         {
-            $this->Post_model->delete_post($id);
-            redirect('/post');
+            if (isset($id) && !empty($id))
+            {
+                $this->Post_model->delete_post($id);
+                redirect('/post');
+            }
+            else
+            {
+                redirect('/post');
+            }
         }
-        else
+        else 
         {
-            redirect('/post');
+            $this->template->build('/errors/access_error');
         }
+        
     }
     
     public function edit($id)
     {
-        if(isset($id) && !empty($id)) 
+        if ($this->session->userdata('user')['admin_role'] == $this->config->item('super_admin_role') ||
+                $this->session->userdata('user')['admin_role'] == $this->config->item('post_admin_role'))
         {
-            $catgories = $this->Post_category_model->get_categories();
-            $data['categories'] = $catgories;
-            $data['post'] = $this->Post_model->get_post_details($id);
-            $this->template->build('/post/edit_post', $data);
+            if(isset($id) && !empty($id)) 
+            {
+                $catgories = $this->Post_category_model->get_categories();
+                $data['categories'] = $catgories;
+                $data['post'] = $this->Post_model->get_post_details($id);
+                $this->template->build('/post/edit_post', $data);
+            }
+            else
+            {
+                redirect('/post');
+            }
         }
-        else
+        else 
         {
-            redirect('/post');
+            $this->template->build('/errors/access_error');
         }
+       
     }
     
     public function edit_details()

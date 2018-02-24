@@ -10,8 +10,9 @@ Class User_model extends CI_Model
     function login($username, $password)
     {
         $this->db->select('*');
-        $this->db->from('admin');
+        $this->db->from('users');
         $this->db->where('email', $username);
+        $this->db->or_where('employee_id', $username);
         $this->db->where('password', md5($password));
         $this->db->limit(1);
 

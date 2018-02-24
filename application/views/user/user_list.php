@@ -56,6 +56,9 @@
                                     <th>Employee Name</th>
                                     <th>Date of Birth</th>
                                     <th>Date of Join</th>
+                                    <th>Email</th>
+                                    <th>Is Admin User?</th>
+                                    <th>User Role</th>
                                     <th>Status</th>
                                     <th class="hidden-480"></th>
                                 </tr>
@@ -77,7 +80,25 @@
                                         </td>
                                         <td><?php echo $user->date_of_birth; ?></td>
                                         <td ><?php echo $user->date_of_join; ?></td>
-                                        <td><?php echo $status; ?></td>
+                                        <td ><?php echo $user->email; ?></td>
+                                        <td ><?php echo $user->is_admin_user == '1' ? 'Yes': 'No'; ?></td>
+                                        <td>
+                                            <?php
+                                            if($user->is_admin_user == $this->config->item('is_admin_user')) 
+                                            {
+                                                if($user->admin_role == $this->config->item('super_admin_role')) {
+                                                    echo 'Super Admin';
+                                                } else if($user->admin_role == $this->config->item('post_admin_role')) {
+                                                     echo 'Post Management Admin';
+                                                } else {
+                                                     echo 'User Management Admin';
+                                                }
+                                            }
+                                            else 
+                                            {
+                                                echo 'Normal User';
+                                            } ?>
+                                        <td><?php echo $user->status == 1 ? 'Active' : 'Deactive'; ?></td>
                                         <td class="td-actions">
                                             <div class="hidden-phone visible-desktop action-buttons">
                                                 <a onclick="change_user_status(<?php echo $user->id; ?>, <?php echo $new_status; ?>)" class="red"  data-rel="tooltip" title="Change Employee details">
@@ -115,10 +136,11 @@ else
             "aoColumns": [
                 {"bSortable": false},
                 {"bSortable": true},
-                {"bSortable": false},
-                {"bSortable": false},
-                {"bSortable": false},
-                {"bSortable": false},
+                {"bSortable": true},
+                {"bSortable": true},
+                {"bSortable": true},
+                {"bSortable": true},
+                {"bSortable": true},
                 {"bSortable": false}
             ]});
 

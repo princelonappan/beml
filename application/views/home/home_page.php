@@ -30,7 +30,7 @@
 													<fieldset>
 														<label>
 															<span class="block input-icon input-icon-right">
-																<input type="text" name='username' class="span12" placeholder="Email" />
+																<input type="text" name='username' class="span12" placeholder="Email Or Employee ID" />
 																<i class="icon-user"></i>
 															</span>
 														</label>

@@ -101,7 +101,7 @@
                                         <td><?php echo $user->status == 1 ? 'Active' : 'Deactive'; ?></td>
                                         <td class="td-actions">
                                             <div class="hidden-phone visible-desktop action-buttons">
-                                                <a onclick="change_user_status(<?php echo $user->id; ?>, <?php echo $new_status; ?>)" class="red"  data-rel="tooltip" title="Change Employee details">
+                                                <a href="<?php echo 'user/edit/' . $user->id; ?>" class="green"  data-rel="tooltip" title="Edit Employee details">
                                                     <i class="icon-pencil bigger-130"></i>
                                                 </a>
                                             </div>

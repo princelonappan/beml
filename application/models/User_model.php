@@ -9,23 +9,12 @@ Class User_model extends CI_Model
 
     function login($username, $password)
     {
-        $this->db->select('*');
-        $this->db->from('users');
-        $this->db->where('email', $username);
-        $this->db->or_where('employee_id', $username);
-        $this->db->where('password', md5($password));
-        $this->db->limit(1);
-
-        $query = $this->db->get();
-
-        if ($query->num_rows() == 1)
-        {
-            return $query->result();
-        }
-        else
-        {
-            return false;
-        }
+        
+        $sql = " SELECT * FROM `users` ";
+        $sql .= " where (email = '$username' OR employee_id = '$username')";
+        $sql .= " AND password = '".md5($password)."'";
+        $users = $this->db->query($sql)->result();
+        return $users;
     }
     
     public function get_user_by_employee_details($employee_id, $date_of_birth, $date_of_join, $mobile_number = NULL)

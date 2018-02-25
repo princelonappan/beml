@@ -63,7 +63,6 @@ class Home extends MY_Controller
 
         //query the database
         $result = $this->User_model->login($username, $password);
-
         if ($result)
         {
             $sess_array = array();

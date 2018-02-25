@@ -30,7 +30,7 @@ Class Post_model extends CI_Model
         if(isset($data) && $data != NULL && $data != '')
         {
             $date_user = new DateTime();
-            $date = $date_user->format("Y-m-d");
+            $date = $date_user->format("Y-m-d H:i:s");
             $new_data = array(
                  'title' => $data['title'],   
                  'body' => $data['body'],   
@@ -51,7 +51,7 @@ Class Post_model extends CI_Model
         $this->db->select('*,a.id as cat_id, post.id as post_id, post.created_date as post_created_date');
         $this->db->from('post');
         $this->db->join('post_category as a','post.category_id = a.id');
-        $this->db->order_by("post.created_date", "desc"); 
+        $this->db->order_by("post.id", "desc"); 
         $query = $this->db->get();
         return $query->result_array();
     }

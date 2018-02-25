@@ -4,7 +4,7 @@
         <ul class="breadcrumb">
             <li>
                 <i class="icon-home home-icon"></i>
-                <a href="index.html">Home</a>
+                <a href="/post">Home</a>
 
                 <span class="divider">
                     <i class="icon-angle-right arrow-icon"></i>

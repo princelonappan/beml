@@ -5,7 +5,7 @@
         <ul class="breadcrumb">
             <li>
                 <i class="icon-home home-icon"></i>
-                <a href="index.html">Home</a>
+                <a href="/post">Home</a>
 
                 <span class="divider">
                     <i class="icon-angle-right arrow-icon"></i>
@@ -92,30 +92,35 @@
                                                                 <input name="media_type" value="1" type="radio" checked="checked"/>
                                                                 <span class="lbl">Upload Image link</span>
                                                             </label>
-                                                            
+                                                            &nbsp;&nbsp;&nbsp;
                                                              <label class="blue" style="display: inline;">
                                                                 <input name="media_type" value="2" type="radio" checked="checked"/>
                                                                 <span class="lbl">Upload PDF link</span>
                                                             </label>
-                                                            
+                                                            &nbsp;&nbsp;&nbsp;
                                                             <label class="blue" style="display: inline;">
                                                                 <input name="media_type" value="3" type="radio" checked="checked"/>
                                                                 <span class="lbl">Upload Website link</span>
                                                             </label>
-                                                            
+                                                            <br />
                                                              <label class="blue" style="display: inline;">
                                                                 <input name="media_type" value="4" type="radio" checked="checked"/>
                                                                 <span class="lbl">Upload Video link</span>
                                                             </label>
-
+                                                            &nbsp;&nbsp;&nbsp;
                                                             <label class="blue" style="display: inline;padding-left: 5px;">
                                                                 <input name="media_type" value="5" type="radio" />
                                                                 <span class="lbl">Upload a YouTube Link</span>
                                                             </label>
-                                                            
+                                                            &nbsp;&nbsp;&nbsp;
                                                             <label class="blue" style="display: inline;padding-left: 5px;">
                                                                 <input name="media_type" value="6" type="radio" />
                                                                 <span class="lbl">Upload a image </span>
+                                                            </label>
+                                                            &nbsp;&nbsp;&nbsp;
+                                                            <label class="blue" style="display: inline;padding-left: 5px;">
+                                                                <input name="media_type" value="7" type="radio" />
+                                                                <span class="lbl">Upload a video </span>
                                                             </label>
                                                         </span>
                                                     </div>
@@ -131,10 +136,19 @@
                                                 </div>
                                                 
                                                 <div class="control-group" id="image_upload_div" style="display: none;">
-                                                    <label class="control-label" for="image">Upload Image</label>
+                                                    <label class="control-label" for="image">Upload Image (5 Mb)</label>
                                                     <div class="controls">
                                                         <div class="span12">
-                                                            <input type="file" name="image" id="image" class="span6" required="required"/>
+                                                            <input type="file" name="image" accept="image/*" id="image" class="span6" required="required"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="control-group" id="video_upload_div" style="display: none;">
+                                                    <label class="control-label" for="image">Upload Video (50 Mb)</label>
+                                                    <div class="controls">
+                                                        <div class="span12">
+                                                            <input type="file" name="video" accept="video/*" id="video" class="span6" required="required"/>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -188,11 +202,17 @@
     $(function () {
         
         var media_type_value = $('input[type=radio][name=media_type]').val();
+        console.log("s", media_type_value);
         if (media_type_value == '6') {
             $("#media_url_upload_link").hide();
             $("#image_upload_div").show();
+            $("#video_upload_div").hide();
         }
-        else {
+        else if(media_type_value == '7') {
+            $("#media_url_upload_link").hide();
+            $("#video_upload_div").show();
+            $("#image_upload_div").hide();
+        } else {
             $("#media_url_upload_link").show();
             $("#image_upload_div").hide();
         }
@@ -208,10 +228,19 @@
          if (this.value == '6') {
             $("#media_url_upload_link").hide();
             $("#image_upload_div").show();
+            $("#video_upload_div").hide();
         }
-        else {
+        else if(this.value == '7')
+        {
+            $("#media_url_upload_link").hide();
+            $("#video_upload_div").show();
+            $("#image_upload_div").hide();
+        }
+        else
+        {
             $("#media_url_upload_link").show();
             $("#image_upload_div").hide();
+            $("#video_upload_div").hide();
         }
     });
         

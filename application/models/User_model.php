@@ -13,6 +13,7 @@ Class User_model extends CI_Model
         $sql = " SELECT * FROM `users` ";
         $sql .= " where (email = '$username' OR employee_id = '$username')";
         $sql .= " AND password = '".md5($password)."'";
+        $sql .= " AND status = '1'";
         $users = $this->db->query($sql)->result();
         return $users;
     }

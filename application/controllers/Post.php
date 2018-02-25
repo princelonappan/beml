@@ -58,11 +58,47 @@ class Post extends Front_Controller
         $data = array();
         if(isset($title) && !empty($body) 
                 && isset($category) && !empty($media_type))
-        {       
-            if (isset($_FILES['image']) && $_FILES['image']['size'] > 0)
+        {     
+            //Checking the image
+            if ($media_type == 6)
             {
-                    $image = $this->_upload_image_beml($_FILES);
+                $allowed = $this->config->item('image_extensions');
+                $maz_size = $this->config->item('image_size_in_mb') * 1048576;
+                $filename = $_FILES['image']['name'];
+                $ext = pathinfo($filename, PATHINFO_EXTENSION);
+                if (!in_array($ext, $allowed))
+                {
+                    $this->session->set_flashdata('message', 'Invalid Image Extension.');
+                    redirect('/post/create');
+                }
+                else if($_FILES['image']['size'] >= $maz_size)
+                {
+                    $this->session->set_flashdata('message', 'File too large.');
+                    redirect('/post/create');
+                }
+                
+                $image = $this->_upload_image_beml($_FILES, 6);
             }
+            else if ($media_type == 7)
+            {
+                $allowed = $this->config->item('video_extensions');
+                $maz_size = $this->config->item('video_size_in_mb') * 1048576;
+                $filename = $_FILES['video']['name'];
+                $ext = pathinfo($filename, PATHINFO_EXTENSION);
+                if (!in_array($ext, $allowed))
+                {
+                    $this->session->set_flashdata('message', 'Invalid Video Extension.');
+                    redirect('/post/create');
+                }
+                else if($_FILES['image']['size'] >= $maz_size)
+                {
+                    $this->session->set_flashdata('message', 'File too large.');
+                    redirect('/post/create');
+                }
+                
+                $image = $this->_upload_image_beml($_FILES, 7);
+            }
+            
             $data['title'] = $title;
             $data['body'] = $body;
             $data['category'] = $category;
@@ -77,12 +113,23 @@ class Post extends Front_Controller
         }
     }
     
-    private function _upload_image_beml($post)
+    private function _upload_image_beml($post, $type)
     {
         $date = new DateTime();
         $config['upload_path'] = $this->config->item('upload_path');
-        $config['allowed_types'] = $this->config->item('allowed_type');
-        $config['max_size'] = $this->config->item('max_size');
+        if($type == 6)
+        {
+            $config['max_size'] = $this->config->item('image_size_in_mb') * 1048;
+            $config['allowed_types'] = $this->config->item('image_extensions_libaray_format');
+            $type_name = 'image';
+        }
+        else
+        {
+            $config['max_size'] = $this->config->item('video_size_in_mb') * 1048;
+            $config['allowed_types'] = $this->config->item('video_extensions_libaray_format');
+            $type_name = 'video';
+        }
+                 
         $config['max_width'] = $this->config->item('max_width');
         $config['max_height'] = $this->config->item('height');
         $config['remove_spaces'] = $this->config->item('remove_spaces');
@@ -94,8 +141,10 @@ class Post extends Front_Controller
         //Uploads student image
         $this->load->library('upload');
         $this->upload->initialize($config);
-        if (!$this->upload->do_upload("image"))
+        if (!$this->upload->do_upload($type_name))
         {
+           print_r($this->upload->display_errors());
+           exit;
             $error = $this->upload->display_errors('', '');
             $this->session->set_flashdata('message', 'Post saved.');
         }
@@ -172,10 +221,47 @@ class Post extends Front_Controller
         if(isset($title) && !empty($body) 
                 && isset($category) && !empty($media_type))
         {       
-            if (isset($_FILES['image']) && $_FILES['image']['size'] > 0)
+            
+            //Checking the image
+            if ($media_type == 6)
             {
-                    $image = $this->_upload_image_beml($_FILES);
+                $allowed = $this->config->item('image_extensions');
+                $maz_size = $this->config->item('image_size_in_mb') * 1048576;
+                $filename = $_FILES['image']['name'];
+                $ext = pathinfo($filename, PATHINFO_EXTENSION);
+                if (!in_array($ext, $allowed))
+                {
+                    $this->session->set_flashdata('message', 'Invalid Image Extension.');
+                    redirect('/post/create');
+                }
+                else if($_FILES['image']['size'] >= $maz_size)
+                {
+                    $this->session->set_flashdata('message', 'File too large.');
+                    redirect('/post/create');
+                }
+                
+                $image = $this->_upload_image_beml($_FILES, 6);
             }
+            else if ($media_type == 7)
+            {
+                $allowed = $this->config->item('video_extensions');
+                $maz_size = $this->config->item('video_size_in_mb') * 1048576;
+                $filename = $_FILES['video']['name'];
+                $ext = pathinfo($filename, PATHINFO_EXTENSION);
+                if (!in_array($ext, $allowed))
+                {
+                    $this->session->set_flashdata('message', 'Invalid Video Extension.');
+                    redirect('/post/create');
+                }
+                else if($_FILES['image']['size'] >= $maz_size)
+                {
+                    $this->session->set_flashdata('message', 'File too large.');
+                    redirect('/post/create');
+                }
+                
+                $image = $this->_upload_image_beml($_FILES, 7);
+            }
+            
             $data['title'] = $title;
             $data['body'] = $body;
             $data['category_id'] = $category;

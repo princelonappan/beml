@@ -5,7 +5,7 @@
         <ul class="breadcrumb">
             <li>
                 <i class="icon-home home-icon"></i>
-                <a href="index.html">Home</a>
+                <a href="/post">Home</a>
 
                 <span class="divider">
                     <i class="icon-angle-right arrow-icon"></i>
@@ -92,7 +92,7 @@
                                                     <label class="control-label" for="email">Can Share? :</label>
                                                     <div class="controls">
                                                          <div class="span12" style='line-height: 31px;'>
-                                                                  <?php if ($post[0]['title'] == 1 ){
+                                                                  <?php if ($post[0]['is_share'] == 1 ){
                                                                      echo 'Yes';
                                                                   } else {
                                                                       echo 'No';

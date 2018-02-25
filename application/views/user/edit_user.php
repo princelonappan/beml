@@ -3,7 +3,7 @@
         <ul class="breadcrumb">
             <li>
                 <i class="icon-home home-icon"></i>
-                <a href="index.html">Home</a>
+                <a href="/user">Home</a>
 
                 <span class="divider">
                     <i class="icon-angle-right arrow-icon"></i>

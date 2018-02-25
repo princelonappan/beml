@@ -4,7 +4,7 @@
         <ul class="breadcrumb">
             <li>
                 <i class="icon-home home-icon"></i>
-                <a href="index.html">Home</a>
+                <a href="/post">Home</a>
 
                 <span class="divider">
                     <i class="icon-angle-right arrow-icon"></i>
@@ -37,6 +37,7 @@
                         <table id="sample-table-2" class="table table-striped table-bordered table-hover">
                             <thead>
                                 <tr>
+                                    <th></th>
                                     <th>Title</th>
                                     <th>Body</th>
                                     <th>Category</th>
@@ -46,11 +47,13 @@
                             </thead>
 
                             <tbody>
-                                <?php      
+                                <?php 
+                                $i = 1;
                                 foreach ($posts as $post)
                                 {
                                     ?>
                                     <tr>
+                                        <td><?php echo $i; ?></td>
                                         <td><?php echo $post['title']; ?></td>                  
                                         <td><?php echo $post['body']; ?></td>
                                         <td><?php echo $post['category_name']; ?></td>
@@ -93,7 +96,7 @@
                                             </div>
                                         </td>
                                     </tr>
-                        <?php } ?>
+                        <?php $i++; } ?>
                             </tbody>
                         </table>
 <?php }
@@ -122,7 +125,8 @@ else
         var oTable1 = $('#sample-table-2').dataTable({
             "aoColumns": [
                 {"bSortable": false},
-                {"bSortable": true},
+                {"bSortable": false},
+                {"bSortable": false},
                 {"bSortable": false},
                 {"bSortable": false},
                 {"bSortable": false}

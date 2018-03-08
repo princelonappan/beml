@@ -46,6 +46,13 @@ Class Like_model extends CI_Model
             return false;
         }
     }
+    
+    public function update_like($like_id, $data)
+    {
+        $this->db->where('id', $like_id);
+        $this->db->update('like' ,$data);
+        return true;
+    }
 }
 
 ?>

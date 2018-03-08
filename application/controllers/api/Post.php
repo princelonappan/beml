@@ -30,54 +30,68 @@ class Post extends REST_Controller
         $this->load->model('Post_comments_model');
         $this->load->model('Post_category_model');
     }
+    
+    function _update_like_count($post, $like_type, $post_id, $update, $previous_type = 0)
+    {
+        $like_count = $post->like_count;
+        $like_total_count_value = $post->like_total_count;
+        $like_count = json_decode($like_count, true);
+        if (empty($like_count))
+        {
+            $like_count[$like_type] = 1;
+        }
+        else
+        {
+            if (array_key_exists($like_type, $like_count))
+            {
+                $like_total_count = $like_count[$like_type];
+                $like_count[$like_type] = $like_total_count + 1;
+            }
+            else
+            {
+                $like_count[$like_type] = 1;
+            }
+            
+            if ($update == true && array_key_exists($previous_type, $like_count))
+            {
+                $like_total_count = $like_count[$previous_type];
+                $like_count[$previous_type] = $like_total_count - 1;
+            }
+        }
+
+        $update_data['like_count'] = json_encode($like_count);
+        if($update === false) 
+        {
+            $update_data['like_total_count'] = $like_total_count_value + 1;
+        }
+        $this->Post_model->update_post_details($post_id, $update_data);
+        $this->response(array('result_code' => 200, 'result_title' => 'Success',
+            'result_string' => 'Successfully updated the details'));
+    }
 
     public function like_post()
     {
         $post_id = $this->post('post_id');
         $user_id = $this->post('user_id');
         $like_type = $this->post('like_type');
+        $data['post_id'] = $post_id;
+        $data['liked_by'] = $user_id;
+        $data['like_type'] = $like_type;
+        $data['created'] = get_current_datetime();
+        $data['ip'] = get_ip_address();
+        $post = $this->Post_model->get_post_by_id($post_id);
         if (!empty($post_id) && !empty($user_id) && !empty($like_type))
         {
-            $data['post_id'] = $post_id;
-            $data['liked_by'] = $user_id;
-            $data['like_type'] = $like_type;
-            $data['created'] = get_current_datetime();
-            $data['ip'] = get_ip_address();
             $like_details = $this->Like_model->get_like_details($user_id, $post_id);
             if (empty($like_details))
             {
                 $response = $this->Like_model->save_post_like($data);
-                $post = $this->Post_model->get_post_by_id($post_id);
                 if (isset($post) && isset($post[0]))
                 {
                     $post = $post[0];
                     if (!empty($response) && !empty($response))
                     {
-                        $like_count = $post->like_count;
-                        $like_total_count_value = $post->like_total_count;
-                        $like_count = json_decode($like_count, true);
-                        if(empty($like_count))
-                        {
-                            $like_count[$like_type] = 1;
-                        }
-                        else 
-                        {
-                            if(array_key_exists($like_type, $like_count)) 
-                            {
-                                $like_total_count = $like_count[$like_type];
-                                $like_count[$like_type] = $like_total_count + 1;
-                            }
-                            else 
-                            {
-                                $like_count[$like_type] = 1;
-                            }
-                        }
-
-                        $update_data['like_count'] = json_encode($like_count);
-                        $update_data['like_total_count'] = $like_total_count_value + 1;
-                        $this->Post_model->update_post_details($post_id, $update_data);
-                        $this->response(array('result_code' => 200, 'result_title' => 'Success',
-                            'result_string' => 'Successfully updated the details'));
+                        $this->_update_like_count($post, $like_type, $post_id, false);
                     }
                     else
                     {
@@ -91,7 +105,30 @@ class Post extends REST_Controller
             }
             else
             {
-                $this->response(array('result_code' => 402, 'result_title' => 'Error', 'result_string' => 'Already liked.'));
+                if(isset($like_details[0]) && $like_details[0]->id) 
+                {
+                    if ($like_details[0]->like_type != $like_type)
+                    {
+                        $response = $this->Like_model->update_like($like_details[0]->id, $data);
+                        if (isset($post) && isset($post[0]))
+                        {
+                            $post = $post[0];
+                            $this->_update_like_count($post, $like_type, $post_id, true, $like_details[0]->like_type);
+                        }
+                        else
+                        {
+                            $this->response(array('result_code' => 400, 'result_title' => 'Error', 'result_string' => 'No Post details found.'));
+                        }
+                    }
+                    else
+                    {
+                        $this->response(array('result_code' => 400, 'result_title' => 'Error', 'result_string' => 'Already liked.'));
+                    }
+                }
+                else
+                {
+                    $this->response(array('result_code' => 400, 'result_title' => 'Error', 'result_string' => 'There was an issue, Please try after some time.'));
+                }
             }
         }
         else

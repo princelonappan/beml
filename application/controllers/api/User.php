@@ -208,21 +208,14 @@ class User extends REST_Controller
                             unset($user->user_profile_image);
                         $user_update_data['is_registered'] = 1;
                         $user_update_data['mobile_number'] = $mobile_number;
-                        $this->User_model->update_users_details($user_id, $user_update_data);
-                        $this->response(array('result_code' => 200, 'result_title' => 'Success',
-                            'result_title' => 'Successfully verified the mobile number.','user' => $user, 'type' => $type));
                     }
-                    else
-                    {
-                        $reset_password_token = rand_string(30);
-                        $user_details = array(
-                            'reset_password_token' => $reset_password_token
-                        );
-                        
-                        $user_details = $this->User_model->update_users_details($user_id, $user_details);
-                        $this->response(array('result_code' => 200, 'result_title' => 'Success', 'user' => $user,
-                            'type' => $type, 'reset_password_token' => $reset_password_token));
-                    }                    
+                    
+                    $reset_password_token = rand_string(30);
+                    $user_update_data['reset_password_token'] = $reset_password_token;
+
+                    $user_details = $this->User_model->update_users_details($user_id, $user_update_data);
+                    $this->response(array('result_code' => 200, 'result_title' => 'Success', 'user' => $user,
+                        'type' => $type, 'reset_password_token' => $reset_password_token));
                 }
                 else 
                 {

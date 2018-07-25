@@ -318,7 +318,7 @@ class User extends REST_Controller
         {
             if (isset($this->rest->user_id) && !empty($this->rest->user_id))
             {
-                $update_data['user_id'] = '';
+                $update_data['user_id'] = 0;
                 $this->Key_model->update_key_details($key, $update_data);
             }
             $this->response(array('result_code' => 200, 'result_title' => 'Success', 'result_string' => 'Successfuly logged out from the application.'));

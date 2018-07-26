@@ -3,7 +3,6 @@
 				<div class="container-fluid">
 					<a href="#" class="brand">
 						<small>
-							<i class="icon-leaf"></i>
 							BEML
 						</small>
 					</a><!--/.brand-->

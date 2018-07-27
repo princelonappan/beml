@@ -40,7 +40,8 @@ Class Post_model extends CI_Model
                  'media_url' => $data['media_url'],
                  'is_share' => $data['is_share'],
                  'created_date' => $date,   
-                 'modified_date' => $date
+                 'modified_date' => $date,
+                 'created_by' => $data['user_id']
             );
             $this->db->insert('post', $new_data);
         }

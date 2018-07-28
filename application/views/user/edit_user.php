@@ -169,15 +169,9 @@
                             </div>
                         </div>            
                     <div class="form-actions">
-                        <button class="btn btn-info" id="course_save" type="button">
+                        <button class="btn btn-info" id="course_save" type="button" style="margin-left: 55px;">
                             <i class="icon-ok bigger-110"></i>
                             Update
-                        </button>
-
-                        &nbsp; &nbsp; &nbsp;
-                        <button class="btn" type="reset">
-                            <i class="icon-undo bigger-110"></i>
-                            Reset
                         </button>
                     </div>
 

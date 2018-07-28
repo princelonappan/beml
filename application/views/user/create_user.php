@@ -51,7 +51,7 @@
                                 <label class="control-label" for="dob">Date Of Birth</label>
                                 <div class="controls">
                                     <div class="span12">
-                                        <input type="text" name="dob" id="dob" class="span6" required="required"/>
+                                        <input type="text" name="dob" id="dob" class="span6" placeholder="MM/DD/YYYY" required="required"/>
                                     </div>
                                 </div>
                             </div>
@@ -61,7 +61,7 @@
                                 <label class="control-label" for="doj">Date Of Join</label>
                                 <div class="controls">
                                     <div class="span12">
-                                        <input type="text" name="doj" id="doj" class="span6" required="required"/>
+                                        <input type="text" name="doj" id="doj" class="span6" placeholder="MM/DD/YYYY" required="required"/>
                                     </div>
                                 </div>
                             </div>
@@ -158,15 +158,9 @@
                     </div>
 
                     <div class="form-actions">
-                        <button class="btn btn-info" id="course_save" type="button">
+                        <button class="btn btn-info" id="course_save" type="button" style="margin-left: 55px;">
                             <i class="icon-ok bigger-110"></i>
                             Save
-                        </button>
-
-                        &nbsp; &nbsp; &nbsp;
-                        <button class="btn" type="reset">
-                            <i class="icon-undo bigger-110"></i>
-                            Reset
                         </button>
                     </div>
 
@@ -184,8 +178,16 @@
 <script src="<?php echo base_url("assests/js/jquery.validate.min.js"); ?>"></script>
 <script type="text/javascript">
     $(function () {
-        $("#dob").datepicker();
-        $("#doj").datepicker();
+        $("#dob").datepicker({
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "1930:<?php echo date('Y'); ?>"
+        });
+        $("#doj").datepicker({
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "1930:<?php echo date('Y'); ?>"
+        });
         var media_type_value = $('input[type=radio][name=media_type]').val();
         $("#course_save").click(function () {
             if($('#validation-form').valid())

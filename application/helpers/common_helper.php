@@ -152,12 +152,25 @@ function format_post($posts, $user_id)
         $post_details[$i]['post_id'] = $post_id = $post['post_id'];
         $post_details[$i]['title'] = $post['title'];
         $post_details[$i]['body'] = $post['body'];
-        $post_details[$i]['like_type_count'] = json_decode($post['like_count'], true);
+        if(!empty(json_decode($post['like_count'], true)))
+        {
+            $like_type_count = json_decode($post['like_count'], true);
+        } 
+        else 
+        {
+            $like_type_count = 0;
+        }
+        
+        $post_details[$i]['like_type_count'] = $like_type_count;
         $post_details[$i]['like_total_count'] = $post['like_total_count'];
         $post_details[$i]['is_share'] = $post['is_share'];
-        if($post['media_type'] && $post['media_type'] == 6)
+        if($post['media_type'] && ($post['media_type'] == 6 || $post['media_type'] == 7))
         {
-            $post_details[$i]['media_url'] = $CI->config->base_url().'uploads/'.$post['file_path'];
+           $post_details[$i]['media_url'] = $CI->config->base_url().'uploads/'.$post['file_path']; 
+        }
+        
+        if($post['media_type'] && $post['media_type'] == 6)
+        {  
             $post_details[$i]['media_type'] = 1;
         }
         else

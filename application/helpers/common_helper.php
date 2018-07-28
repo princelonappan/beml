@@ -164,18 +164,26 @@ function format_post($posts, $user_id)
         $post_details[$i]['like_type_count'] = $like_type_count;
         $post_details[$i]['like_total_count'] = $post['like_total_count'];
         $post_details[$i]['is_share'] = $post['is_share'];
-        $post_details[$i]['media_type'] = $post['media_type'] == 6 ? 1 : $post['media_type'];
-        
-        if($post['media_type'] == 6 || $post['media_type'] == 7)
-        {  
-            $post_details[$i]['media_url'] = $CI->config->base_url().'uploads/'.$post['file_path']; 
+        $post_details[$i]['media_available'] = $post['media_available'];
+        if ($post['media_available'] == 1)
+        {
+            $post_details[$i]['media_type'] = $post['media_type'] == 6 ? 1 : $post['media_type'];
+            if ($post['media_type'] == 6 || $post['media_type'] == 7)
+            {
+                $post_details[$i]['media_url'] = $CI->config->base_url() . 'uploads/' . $post['file_path'];
+            }
+            else
+            {
+                $post_details[$i]['media_url'] = $post['media_url'];
+            }
         }
         else
         {
-            $post_details[$i]['media_url'] = $post['media_url'];
+            $post_details[$i]['media_type'] = 0;
+            $post_details[$i]['media_url'] = '';
         }
-      
-        
+
+
         $like_details = $CI->Like_model->get_like_details($user_id, $post_id);
         if(empty($like_details))
             $post_details[$i]['is_liked'] = 0;

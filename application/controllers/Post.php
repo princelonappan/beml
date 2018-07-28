@@ -54,56 +54,63 @@ class Post extends Front_Controller
         $media_type = $this->input->post('media_type');
         $media_url = $this->input->post('media_url');
         $can_share = $this->input->post('can_share');
+        $media_available = $this->input->post('media_available');
         $image = NULL;
+        $media_url = NULL;
         $data = array();
-        if(isset($title) && !empty($body) 
-                && isset($category) && !empty($media_type))
-        {     
-            //Checking the image
-            if ($media_type == 6)
+        if (isset($title) && !empty($body) && isset($category) && !empty($media_available))
+        {
+
+            if ($media_available == 1)
             {
-                $allowed = $this->config->item('image_extensions');
-                $maz_size = $this->config->item('image_size_in_mb') * 1048576;
-                $filename = $_FILES['image']['name'];
-                $ext = pathinfo($filename, PATHINFO_EXTENSION);
-                if (!in_array($ext, $allowed))
+                //Checking the image
+                if ($media_type == 6)
                 {
-                    $this->session->set_flashdata('message', 'Invalid Image Extension.');
-                    redirect('/post/create');
+                    $allowed = $this->config->item('image_extensions');
+                    $maz_size = $this->config->item('image_size_in_mb') * 1048576;
+                    $filename = $_FILES['image']['name'];
+                    $ext = pathinfo($filename, PATHINFO_EXTENSION);
+                    if (!in_array($ext, $allowed))
+                    {
+                        $this->session->set_flashdata('message', 'Invalid Image Extension.');
+                        redirect('/post/create');
+                    }
+                    else if ($_FILES['image']['size'] >= $maz_size)
+                    {
+                        $this->session->set_flashdata('message', 'File too large.');
+                        redirect('/post/create');
+                    }
+
+                    $image = $this->_upload_image_beml($_FILES, 6);
                 }
-                else if($_FILES['image']['size'] >= $maz_size)
+                else if ($media_type == 7)
                 {
-                    $this->session->set_flashdata('message', 'File too large.');
-                    redirect('/post/create');
+                    $allowed = $this->config->item('video_extensions');
+                    $maz_size = $this->config->item('video_size_in_mb') * 1048576;
+                    $filename = $_FILES['video']['name'];
+                    $ext = pathinfo($filename, PATHINFO_EXTENSION);
+                    if (!in_array($ext, $allowed))
+                    {
+                        $this->session->set_flashdata('message', 'Invalid Video Extension.');
+                        redirect('/post/create');
+                    }
+                    else if ($_FILES['image']['size'] >= $maz_size)
+                    {
+                        $this->session->set_flashdata('message', 'File too large.');
+                        redirect('/post/create');
+                    }
+
+                    $image = $this->_upload_image_beml($_FILES, 7);
                 }
-                
-                $image = $this->_upload_image_beml($_FILES, 6);
             }
-            else if ($media_type == 7)
-            {
-                $allowed = $this->config->item('video_extensions');
-                $maz_size = $this->config->item('video_size_in_mb') * 1048576;
-                $filename = $_FILES['video']['name'];
-                $ext = pathinfo($filename, PATHINFO_EXTENSION);
-                if (!in_array($ext, $allowed))
-                {
-                    $this->session->set_flashdata('message', 'Invalid Video Extension.');
-                    redirect('/post/create');
-                }
-                else if($_FILES['image']['size'] >= $maz_size)
-                {
-                    $this->session->set_flashdata('message', 'File too large.');
-                    redirect('/post/create');
-                }
-                
-                $image = $this->_upload_image_beml($_FILES, 7);
-            }
-            
+
+
             $data['title'] = $title;
             $data['body'] = $body;
             $data['category'] = $category;
             $data['media_type'] = $media_type;
             $data['media_url'] = $media_url;
+            $data['media_available'] = $media_available;
             $data['image'] = $image;
             $data['is_share'] = $can_share;
             $data['user_id'] = get_logged_user_id();
@@ -217,61 +224,73 @@ class Post extends Front_Controller
         $media_type = $this->input->post('media_type');
         $media_url = $this->input->post('media_url');
         $can_share = $this->input->post('can_share');
+        $media_available = $this->input->post('media_available');
         $image = NULL;
         $data = array();
-        if(isset($title) && !empty($body) 
-                && isset($category) && !empty($media_type))
-        {       
-            
-            //Checking the image
-            if ($media_type == 6)
+        if (isset($title) && !empty($body) && isset($category) && !empty($media_available))
+        {
+            if ($media_available == 1)
             {
-                $allowed = $this->config->item('image_extensions');
-                $maz_size = $this->config->item('image_size_in_mb') * 1048576;
-                $filename = $_FILES['image']['name'];
-                $ext = pathinfo($filename, PATHINFO_EXTENSION);
-                if (!in_array($ext, $allowed))
+                //Checking the image
+                if ($media_type == 6)
                 {
-                    $this->session->set_flashdata('message', 'Invalid Image Extension.');
-                    redirect('/post/create');
+                    $allowed = $this->config->item('image_extensions');
+                    $maz_size = $this->config->item('image_size_in_mb') * 1048576;
+                    $filename = $_FILES['image']['name'];
+                    $ext = pathinfo($filename, PATHINFO_EXTENSION);
+                    if (!in_array($ext, $allowed))
+                    {
+                        $this->session->set_flashdata('message', 'Invalid Image Extension.');
+                        redirect('/post/create');
+                    }
+                    else if ($_FILES['image']['size'] >= $maz_size)
+                    {
+                        $this->session->set_flashdata('message', 'File too large.');
+                        redirect('/post/create');
+                    }
+
+                    $image = $this->_upload_image_beml($_FILES, 6);
                 }
-                else if($_FILES['image']['size'] >= $maz_size)
+                else if ($media_type == 7)
                 {
-                    $this->session->set_flashdata('message', 'File too large.');
-                    redirect('/post/create');
+                    $allowed = $this->config->item('video_extensions');
+                    $maz_size = $this->config->item('video_size_in_mb') * 1048576;
+                    $filename = $_FILES['video']['name'];
+                    $ext = pathinfo($filename, PATHINFO_EXTENSION);
+                    if (!in_array($ext, $allowed))
+                    {
+                        $this->session->set_flashdata('message', 'Invalid Video Extension.');
+                        redirect('/post/create');
+                    }
+                    else if ($_FILES['image']['size'] >= $maz_size)
+                    {
+                        $this->session->set_flashdata('message', 'File too large.');
+                        redirect('/post/create');
+                    }
+
+                    $image = $this->_upload_image_beml($_FILES, 7);
                 }
                 
-                $image = $this->_upload_image_beml($_FILES, 6);
-            }
-            else if ($media_type == 7)
-            {
-                $allowed = $this->config->item('video_extensions');
-                $maz_size = $this->config->item('video_size_in_mb') * 1048576;
-                $filename = $_FILES['video']['name'];
-                $ext = pathinfo($filename, PATHINFO_EXTENSION);
-                if (!in_array($ext, $allowed))
+                if($media_type && $media_url) 
                 {
-                    $this->session->set_flashdata('message', 'Invalid Video Extension.');
-                    redirect('/post/create');
+                    $data['media_type'] = $media_type;
+                    $data['media_url'] = $media_url;
                 }
-                else if($_FILES['image']['size'] >= $maz_size)
-                {
-                    $this->session->set_flashdata('message', 'File too large.');
-                    redirect('/post/create');
-                }
+                    
+                if ($image)
+                    $data['file_path'] = $image;
                 
-                $image = $this->_upload_image_beml($_FILES, 7);
+            } else
+            {
+                    $data['media_type'] = 0;
+                    $data['media_url'] = NULL;
+                    $data['file_path'] = NULL;
             }
-            
+
             $data['title'] = $title;
             $data['body'] = $body;
             $data['category_id'] = $category;
-            if($media_type)
-                $data['media_type'] = $media_type;
-            if($media_url)
-                $data['media_url'] = $media_url;
-            if($image)
-                $data['file_path'] = $image;
+            $data['media_available'] = $media_available;
             
             $data['is_share'] = $can_share;
             $data['modified_date'] = get_current_datetime();

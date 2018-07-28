@@ -85,6 +85,26 @@
                                                     </div>
                                                 </div>
                                                 
+                                                <div class="control-group">
+                                                    <label class="control-label" for="media_available">Media Available?</label>
+                                                    <div class="controls">
+                                                        <span class="span12">
+                                                            <label class="blue" style="display: inline;">
+                                                                <input name="media_available" value="1" type="radio" 
+                                                                       <?php echo $post[0]['media_available'] == 1 ? 'checked="checked"' : ''; ?>/>
+                                                                <span class="lbl">Yes</span>
+                                                            </label>
+
+                                                            <label class="blue" style="display: inline;padding-left: 5px;">
+                                                                <input name="media_available" value="2" type="radio" 
+                                                                       <?php echo $post[0]['media_available'] == 2 ? 'checked="checked"' : ''; ?>/>
+                                                                <span class="lbl">No</span>
+                                                            </label>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div id="media_div" style=<?php echo $post[0]['media_available'] == 2 ? "display:none" : ''; ?>>
                                                 <div class="control-group" >
                                                     <label class="control-label" for="media_url">Media URL :</label>
                                                     <div class="controls">
@@ -170,6 +190,8 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                                    
+                                                    </div>
                                                 
                                                   <div class="control-group">
                                                     <label class="control-label" for="email">Can Share?</label>
@@ -235,6 +257,15 @@
             $("#media_url_upload_link").show();
             $("#image_upload_div").hide();
         }
+        
+        $('input[type=radio][name=media_available]').change(function() {
+           if (this.value == '2') {
+               $("#media_div").hide();
+           } else {
+               $("#media_div").show();
+           }
+           
+       });
         
         $("#course_save").click(function () {
             if($('#validation-form').valid())

@@ -41,7 +41,8 @@ Class Post_model extends CI_Model
                  'is_share' => $data['is_share'],
                  'created_date' => $date,   
                  'modified_date' => $date,
-                 'created_by' => $data['user_id']
+                 'created_by' => $data['user_id'],
+                 'media_available' => $data['media_available']
             );
             $this->db->insert('post', $new_data);
         }

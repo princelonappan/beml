@@ -85,42 +85,61 @@
                                                 </div>
                                                 
                                                 <div class="control-group">
-                                                    <label class="control-label" for="email">Media Type</label>
+                                                    <label class="control-label" for="media_available">Media Available?</label>
                                                     <div class="controls">
                                                         <span class="span12">
                                                             <label class="blue" style="display: inline;">
-                                                                <input name="media_type" value="1" type="radio" checked="checked"/>
-                                                                <span class="lbl">Upload Image link</span>
+                                                                <input name="media_available" value="1" type="radio" checked="checked"/>
+                                                                <span class="lbl">Yes</span>
+                                                            </label>
+
+                                                            <label class="blue" style="display: inline;padding-left: 5px;">
+                                                                <input name="media_available" value="2" type="radio" />
+                                                                <span class="lbl">No</span>
+                                                            </label>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div id="media_div">
+                                                <div class="control-group">
+                                                    <label class="control-label" for="email">Media Type</label>
+                                                    <div class="controls">
+                                                        <span class="span12">
+                                                           
+                                                            <label class="blue" style="display: inline;">
+                                                                <input name="media_type" value="1" type="radio" />
+                                                                <span class="lbl">&nbsp;Upload Image link</span>
                                                             </label>
                                                             &nbsp;&nbsp;&nbsp;
                                                              <label class="blue" style="display: inline;">
-                                                                <input name="media_type" value="2" type="radio" checked="checked"/>
-                                                                <span class="lbl">Upload PDF link</span>
+                                                                <input name="media_type" value="2" type="radio" />
+                                                                <span class="lbl">&nbsp;Upload PDF link</span>
                                                             </label>
                                                             &nbsp;&nbsp;&nbsp;
                                                             <label class="blue" style="display: inline;">
-                                                                <input name="media_type" value="3" type="radio" checked="checked"/>
-                                                                <span class="lbl">Upload Website link</span>
+                                                                <input name="media_type" value="3" type="radio" />
+                                                                <span class="lbl">&nbsp;Upload Website link</span>
                                                             </label>
                                                             <br />
                                                              <label class="blue" style="display: inline;">
-                                                                <input name="media_type" value="4" type="radio" checked="checked"/>
-                                                                <span class="lbl">Upload Video link</span>
+                                                                <input name="media_type" value="4" type="radio" />
+                                                                <span class="lbl">&nbsp;Upload Video link</span>
                                                             </label>
                                                             &nbsp;&nbsp;&nbsp;
                                                             <label class="blue" style="display: inline;padding-left: 5px;">
                                                                 <input name="media_type" value="5" type="radio" />
-                                                                <span class="lbl">Upload a YouTube Link</span>
+                                                                <span class="lbl">&nbsp;Upload a YouTube Link</span>
                                                             </label>
                                                             &nbsp;&nbsp;&nbsp;
                                                             <label class="blue" style="display: inline;padding-left: 5px;">
                                                                 <input name="media_type" value="6" type="radio" />
-                                                                <span class="lbl">Upload a image </span>
+                                                                <span class="lbl">&nbsp;Upload a image </span>
                                                             </label>
                                                             &nbsp;&nbsp;&nbsp;
                                                             <label class="blue" style="display: inline;padding-left: 5px;">
                                                                 <input name="media_type" value="7" type="radio" />
-                                                                <span class="lbl">Upload a video </span>
+                                                                <span class="lbl">&nbsp;Upload a video </span>
                                                             </label>
                                                         </span>
                                                     </div>
@@ -152,7 +171,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                
+                                                </div>
                                                   <div class="control-group">
                                                     <label class="control-label" for="email">Can Share?</label>
                                                     <div class="controls">
@@ -223,7 +242,15 @@
             }
             
         });
-        
+       
+       $('input[type=radio][name=media_available]').change(function() {
+           if (this.value == '2') {
+               $("#media_div").hide();
+           } else {
+               $("#media_div").show();
+           }
+           
+       });
     $('input[type=radio][name=media_type]').change(function() {
          if (this.value == '6') {
             $("#media_url_upload_link").hide();

@@ -71,6 +71,17 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                                
+                                                <div class="control-group">
+                                                    <label class="control-label" for="media_available">Media Available? :</label>
+                                                    <div class="controls">
+                                                        <div class="span12" style='line-height: 31px;'>
+                                                            <?php echo $post[0]['media_available'] == 1 ? 'Yes' : 'NO';?>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <?php 
+                                                if($post[0]['media_available'] == 1) { ?>
                                                 <div class="control-group" id="media_url_upload_link">
                                                     <label class="control-label" for="media_url">Media URL :</label>
                                                     <div class="controls">
@@ -87,6 +98,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <?php } ?>
                                                
                                                   <div class="control-group">
                                                     <label class="control-label" for="email">Can Share? :</label>

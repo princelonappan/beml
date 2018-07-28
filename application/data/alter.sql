@@ -67,4 +67,6 @@ INSERT INTO `users` (`id`, `employee_id`, `mobile_number`, `name`, `email`, `is_
 ALTER TABLE `users` CHANGE `is_comment_share_post` `is_comment_share_post` TINYINT(2) NULL DEFAULT '1';
 
 ALTER TABLE `post` CHANGE `created_date` `created_date` DATETIME NOT NULL;
-ALTER TABLE `post` CHANGE `modified_date` `modified_date` DATETIME NOT NULL;
+ALTER TABLE `post` CHANGE `modified_date` `modified_date` DATETIME NOT NULL
+
+ALTER TABLE `post` ADD `media_available` TINYINT(3) NOT NULL DEFAULT '1' AFTER `category_id`;

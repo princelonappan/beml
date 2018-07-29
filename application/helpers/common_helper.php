@@ -97,6 +97,24 @@ function get_logged_in_user()
 	return false;
 }
 
+function get_logged_user_name()
+{
+    $user = get_logged_in_user();
+    if ($user && !empty($user))
+    {
+        if($user['name'] && !empty($user['name']))
+            return $user['name'];
+        else if($user['username'] && !empty($user['username']))
+            return $user['username'];
+        else
+            return $user['employee_id'];
+    }
+    else
+    {
+        return false;
+    }
+}
+
 /**
 * Function to return if the user is logged in or not
 *

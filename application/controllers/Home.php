@@ -77,7 +77,9 @@ class Home extends MY_Controller
                         'user_id' => $row->id,
                         'username' => $row->email,
                         'is_admin_user' => $row->is_admin_user,
-                        'admin_role' => $row->admin_role  
+                        'admin_role' => $row->admin_role,
+                        'employee_id' => $row->employee_id,
+                        'name' => $row->name
                     );
                     $this->session->set_userdata('user', $sess_array);
                 }

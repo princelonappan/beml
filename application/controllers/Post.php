@@ -56,7 +56,6 @@ class Post extends Front_Controller
         $can_share = $this->input->post('can_share');
         $media_available = $this->input->post('media_available');
         $image = NULL;
-        $media_url = NULL;
         $data = array();
         if (isset($title) && !empty($body) && isset($category) && !empty($media_available))
         {
@@ -84,7 +83,7 @@ class Post extends Front_Controller
                     $image = $this->_upload_image_beml($_FILES, 6);
                 }
                 else if ($media_type == 7)
-                {
+                {                   
                     $allowed = $this->config->item('video_extensions');
                     $maz_size = $this->config->item('video_size_in_mb') * 1048576;
                     $filename = $_FILES['video']['name'];
@@ -94,7 +93,7 @@ class Post extends Front_Controller
                         $this->session->set_flashdata('message', 'Invalid Video Extension.');
                         redirect('/post/create');
                     }
-                    else if ($_FILES['image']['size'] >= $maz_size)
+                    else if ($_FILES['video']['size'] >= $maz_size)
                     {
                         $this->session->set_flashdata('message', 'File too large.');
                         redirect('/post/create');
@@ -102,6 +101,11 @@ class Post extends Front_Controller
 
                     $image = $this->_upload_image_beml($_FILES, 7);
                 }
+            } 
+            else
+            {
+                $media_type = 0;
+                $media_url = NULL;
             }
 
 
@@ -118,6 +122,11 @@ class Post extends Front_Controller
             $this->session->set_flashdata('message', 'Post saved');
             redirect('/post/create');
             
+        } 
+        else
+        {
+            $this->session->set_flashdata('message', 'Failed to save the information. Please check you have provided valid data');
+            redirect('/post/create');
         }
     }
     
@@ -151,15 +160,13 @@ class Post extends Front_Controller
         $this->upload->initialize($config);
         if (!$this->upload->do_upload($type_name))
         {
-           print_r($this->upload->display_errors());
-           exit;
             $error = $this->upload->display_errors('', '');
-            $this->session->set_flashdata('message', 'Post saved.');
+            $this->session->set_flashdata('message', 'Error Occured while saving the post.');
         }
         else
         {
               $file_data = $this->upload->data();              
-              return $file_data['file_name'];;
+              return $file_data['file_name'];
         }
     }
     
@@ -227,6 +234,7 @@ class Post extends Front_Controller
         $media_available = $this->input->post('media_available');
         $image = NULL;
         $data = array();
+
         if (isset($title) && !empty($body) && isset($category) && !empty($media_available))
         {
             if ($media_available == 1)
@@ -296,8 +304,13 @@ class Post extends Front_Controller
             $data['modified_date'] = get_current_datetime();
             $this->Post_model->update_post_details($post_id, $data);
             $this->session->set_flashdata('message', 'Post Updated');
-            redirect('/post');
+            redirect('/post/edit/'.$post_id);
             
+        }
+        else
+        {
+            $this->session->set_flashdata('message', 'Failed to update the information. Please check you have provided valid data');
+            redirect('/post');
         }
     }
     

@@ -41,10 +41,13 @@
                 
                 <form class="form-horizontal style-form" id="validation-form" method="POST" action="<?php echo $this->config->base_url(); ?>post/edit_details" enctype="multipart/form-data">
                                         <div class="step-content row-fluid position-relative" id="step-container">
-                                            <div class="alert alert-success"">
+                                             <?php if (!empty($this->session->flashdata('message')))
+                        { ?>
+                                            <div class="alert alert-success">
                                              <?php $message = $this->session->flashdata('message'); 
                                              echo $message; ?>
                                             </div>
+                        <?php } ?>
                                             <div class="step-pane active" id="step1">
                                                 <div class="control-group">
                                                     <label class="control-label" for="title">Title</label>
@@ -262,9 +265,16 @@
        });
         
         $("#course_save").click(function () {
-            if($('#validation-form').valid())
+            if($('input[type=radio][name=media_type]:checked').val() == 7 && document.getElementById("video") && document.getElementById("video").files[0].size > 52428800)
             {
-                $("form")[0].submit()
+                alert("Sorry. Your file is too large. Only 50MB is allowed.")
+            }
+            else
+            {
+                if($('#validation-form').valid())
+                {
+                    $("form")[0].submit()
+                }
             }
             
         });

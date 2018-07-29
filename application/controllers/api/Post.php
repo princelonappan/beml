@@ -298,29 +298,16 @@ class Post extends REST_Controller
             $data['user_id'] = $user_id;
             $data['comment'] = $comment;
             $data['created_date'] = get_current_datetime();
-            $data['status'] = 1;
+            $data['status'] = 2;
             $details = $this->Post_comments_model->save_comment($data);
-            $post = $this->Post_model->get_post_by_id($post_id);
-            if (isset($post) && isset($post[0]))
+            if ($details)
             {
-                $post = $post[0];
-                if ($details)
-                {
-                    $comment_count = $post->comment_count;
-                    $new_count = $comment_count + 1;
-                    $update_data['comment_count'] = $new_count;
-                    $this->Post_model->update_post_details($post_id, $update_data);
-                    $this->response(array('result_code' => 200, 'result_title' => 'Success',
-                        'result_string' => 'Successfully added the comment.'));
-                }
-                else
-                {
-                    $this->response(array('result_code' => 400, 'result_title' => 'Error', 'result_string' => 'There was an issue, Please try after some time.'));
-                }
+                $this->response(array('result_code' => 200, 'result_title' => 'Success',
+                    'result_string' => 'Successfully added the comment.'));
             }
             else
             {
-                $this->response(array('result_code' => 400, 'result_title' => 'Error', 'result_string' => 'No Post details found.'));
+                $this->response(array('result_code' => 400, 'result_title' => 'Error', 'result_string' => 'There was an issue, Please try after some time.'));
             }
         }
         else

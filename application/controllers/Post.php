@@ -330,10 +330,15 @@ class Post extends Front_Controller
     
     public function change_comment_status($id, $status, $post_id)
     {
-        if(isset($id) && !empty($id) && $status) 
+        $post = $this->Post_model->get_post_by_id($post_id);
+        if(isset($id) && !empty($id) && $status && $post[0]) 
         {
+            $post = $post[0];
             $update_data['status'] = $status;
             $this->Post_comments_model->updated_post_comment($id, $update_data);
+            $count = $this->Post_comments_model->get_active_comments_count($post_id);
+            $update_post_data['comment_count'] = $count;
+            $this->Post_model->update_post_details($post_id, $update_post_data);
             redirect("post/view_comments/".$post_id);
         }
         else

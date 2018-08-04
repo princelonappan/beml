@@ -300,6 +300,9 @@ class Post extends REST_Controller
             $data['created_date'] = get_current_datetime();
             $data['status'] = 2;
             $details = $this->Post_comments_model->save_comment($data);
+            $count = $this->Post_comments_model->get_comments_count($post_id, 2);
+            $update_post_data['pending_review_count'] = $count;
+            $this->Post_model->update_post_details($post_id, $update_post_data);
             if ($details)
             {
                 $this->response(array('result_code' => 200, 'result_title' => 'Success',

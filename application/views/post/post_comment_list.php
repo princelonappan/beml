@@ -44,6 +44,7 @@
                                     <th>Status</th>
                                     <th>Created Date</th> 
                                     <th></th>
+                                    <th></th>
                                 </tr>
                             </thead>
 
@@ -64,11 +65,10 @@
                                         <td><?php echo $comment['post_commented_date']; ?></td>
 
                                         <td class="td-actions">
-                                            <div class="hidden-phone visible-desktop action-buttons">
-                                                <a onclick="change_status_post(<?php echo $comment['post_comment_id']; ?>, <?php echo $status;?>, <?php echo $comment['post_id'];?>)"  name='view_post' class="green view_post" id ="<?php echo $comment['post_comment_id']; ?>" data-rel="tooltip" title="Change Status">
-                                                    <i class="icon-pencil bigger-130"></i>
-                                                </a>                                             
-                                            </div>
+                                            <a href="" onclick="change_status_post(<?php echo $comment['post_comment_id']; ?>, 1, <?php echo $comment['post_id'];?>)">Approve</a>                                                                                   
+                                        </td>
+                                        <td class="td-actions">
+                                             <a href="" onclick="change_status_post(<?php echo $comment['post_comment_id']; ?>, 3, <?php echo $comment['post_id'];?>)">Ignore</a>
                                         </td>
                                     </tr>
                         <?php } ?>
@@ -101,6 +101,9 @@ else
             "aoColumns": [
                 {"bSortable": false},
                 {"bSortable": true},
+                {"bSortable": false},
+                {"bSortable": false},
+                {"bSortable": false},
                 {"bSortable": false},
                 {"bSortable": false},
                 {"bSortable": false}

@@ -41,8 +41,9 @@
                                     <th>Title</th>
                                     <th>Body</th>
                                     <th>Category</th>
+                                    <th style="width:8%;">Pending Review Count</th>
                                     <th>Created Date</th> 
-                                    <th></th>
+                                    <th style="width:13%;"></th>
                                 </tr>
                             </thead>
 
@@ -57,15 +58,16 @@
                                         <td><?php echo $post['title']; ?></td>                  
                                         <td><?php echo $post['body']; ?></td>
                                         <td><?php echo $post['category_name']; ?></td>
+                                        <td><?php echo $post['pending_review_count']; ?></td>
                                         <td><?php echo $post['post_created_date']; ?></td>
 
                                         <td class="td-actions">
-                                            <div class="hidden-phone visible-desktop action-buttons">
-                                                <a href="<?php echo 'post/post_view/' . $post['post_id']; ?>" onclick='' name='view_post' class="green view_post" id ="<?php echo $post['post_id']; ?>" data-rel="tooltip" title="View Post">
+                                            <div class=" action-buttons">
+                                                <a href="<?php echo '/post/post_view/' . $post['post_id']; ?>" onclick='' name='view_post' class="green view_post" id ="<?php echo $post['post_id']; ?>" data-rel="tooltip" title="View Post">
                                                     <i class="icon-eye-open bigger-130"></i>
                                                 </a>
                                                 
-                                                <a href="<?php echo 'post/edit/' . $post['post_id']; ?>" onclick='' name='view_post' class="green view_post" id ="<?php echo $post['post_id']; ?>" data-rel="tooltip" title="Edit Post">
+                                                <a href="<?php echo '/post/edit/' . $post['post_id']; ?>" onclick='' name='view_post' class="green view_post" id ="<?php echo $post['post_id']; ?>" data-rel="tooltip" title="Edit Post">
                                                     <i class="icon-pencil bigger-130"></i>
                                                 </a>
                                                 
@@ -73,26 +75,9 @@
                                                     <i class="icon-remove-sign bigger-130"></i>
                                                 </a>
                                                 
-                                                <a  href="<?php echo 'post/view_comments/' . $post['post_id']; ?>" name='view_post' class="green view_post" id ="<?php echo $post['post_id']; ?>" data-rel="tooltip" title="Display Comments">
+                                                <a  href="<?php echo '/post/view_comments/' . $post['post_id']; ?>" name='view_post' class="green view_post" id ="<?php echo $post['post_id']; ?>" data-rel="tooltip" title="Display Comments">
                                                     <i class="icon-eye-open bigger-130"></i>
                                                 </a>
-                                            </div>
-                                            <div class="hidden-desktop visible-phone">
-                                                <div class="inline position-relative">
-                                                    <button class="btn btn-minier btn-yellow dropdown-toggle" data-toggle="dropdown">
-                                                        <i class="icon-caret-down icon-only bigger-120"></i>
-                                                    </button>
-
-                                                    <ul class="dropdown-menu dropdown-icon-only dropdown-yellow pull-right dropdown-caret dropdown-close">
-                                                        <li>
-                                                            <a href="" class="tooltip-success" data-rel="tooltip" title="View Post">
-                                                                <span class="green">
-                                                                    <i name='view_post' class="view_post icon-delete bigger-120" ></i>
-                                                                </span>
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
                                             </div>
                                         </td>
                                     </tr>
@@ -128,6 +113,7 @@ else
                 {"bSortable": false},
                 {"bSortable": false},
                 {"bSortable": false},
+                {"bSortable": true},
                 {"bSortable": false},
                 {"bSortable": false}
             ]});

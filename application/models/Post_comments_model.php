@@ -54,11 +54,11 @@ Class Post_comments_model extends CI_Model
         $this->db->update('post_comments' ,$data);
     }
     
-    public function get_active_comments_count($post_id) 
+    public function get_comments_count($post_id, $status = 1) 
     {
         $this->db->select('id');
         $this->db->from('post_comments');
-        $this->db->where('status', 1);
+        $this->db->where('status', $status);
         $this->db->where('post_id', $post_id);
         $query = $this->db->get();
         return $query->num_rows();

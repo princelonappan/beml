@@ -21,7 +21,7 @@ class Post extends Front_Controller
                 $this->session->userdata('user')['admin_role'] == $this->config->item('post_admin_role'))
         {
             $data = array();
-            $data['posts'] = $this->Post_model->get_posts();
+            $data['posts'] = $posts = $this->Post_model->get_posts();
             $this->template->build('/post/post_list', $data);
         }
         else 
@@ -336,8 +336,10 @@ class Post extends Front_Controller
             $post = $post[0];
             $update_data['status'] = $status;
             $this->Post_comments_model->updated_post_comment($id, $update_data);
-            $count = $this->Post_comments_model->get_active_comments_count($post_id);
+            $count = $this->Post_comments_model->get_comments_count($post_id, 1);
             $update_post_data['comment_count'] = $count;
+            $pending_count = $this->Post_comments_model->get_comments_count($post_id, 2);
+            $update_post_data['pending_review_count'] = $pending_count;
             $this->Post_model->update_post_details($post_id, $update_post_data);
             redirect("post/view_comments/".$post_id);
         }
@@ -345,6 +347,19 @@ class Post extends Front_Controller
         {
             redirect('/post');
         }
+    }
+    
+    public function update_pending_review_count() 
+    {
+        $posts = $this->Post_model->get_posts();
+        foreach ($posts as $post)
+        {
+            $pending_count = $this->Post_comments_model->get_comments_count($post['post_id'], 2);
+            $update_post_data['pending_review_count'] = $pending_count;
+            $this->Post_model->update_post_details($post['post_id'], $update_post_data);
+            echo $post['post_id'] . ' -> ' . $pending_count.' </br>';
+        }
+        
     }
 }
 

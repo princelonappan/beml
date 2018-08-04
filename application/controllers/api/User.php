@@ -319,6 +319,7 @@ class User extends REST_Controller
             if (isset($this->rest->user_id) && !empty($this->rest->user_id))
             {
                 $update_data['user_id'] = 0;
+                $update_data['device_token'] = '';
                 $this->Key_model->update_key_details($key, $update_data);
             }
             $this->response(array('result_code' => 200, 'result_title' => 'Success', 'result_string' => 'Successfuly logged out from the application.'));
@@ -476,6 +477,22 @@ class User extends REST_Controller
         else
         {
             $this->response(array('result_code' => 400, 'result_title' => 'Error', 'result_string' => 'Please provide user password details.'));
+        }
+    }
+    
+    public function update_device_token_post() 
+    {
+        $key = $this->rest->key;
+        $device_token = $this->post('device_token');
+        if (!empty($key) && !empty($key) && !empty($device_token))
+        {
+            $update_data['device_token'] = $device_token;
+            $this->Key_model->update_key_details($key, $update_data);
+            $this->response(array('result_code' => 200, 'result_title' => 'Success', 'result_string' => 'Successfuly updated the device token.'));
+        }
+        else
+        {
+            $this->response(array('result_code' => 400, 'result_title' => 'Error', 'result_string' => 'Please provide the device/user details.'));
         }
     }
 

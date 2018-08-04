@@ -73,3 +73,4 @@ ALTER TABLE `post` ADD `media_available` TINYINT(3) NOT NULL DEFAULT '1' AFTER `
 ALTER TABLE `post_comments` CHANGE `status` `status` TINYINT(2) NOT NULL DEFAULT '1' COMMENT '1 - active 2 - inactive';
 
 ALTER TABLE `post` ADD `pending_review_count` TINYINT(3) NOT NULL DEFAULT '0' AFTER `comment_count`;
+ALTER TABLE `api_keys` ADD `device_token` TEXT NULL AFTER `key`;

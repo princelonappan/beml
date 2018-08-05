@@ -317,3 +317,75 @@ function save_otp_details($otp, $mobile_number, $type, $employee_id)
     $otp_details['employee_id'] = $employee_id;
     return $otp_details;
 }
+
+function insert_notification($post_title, $post_description) 
+{
+    $CI = & get_instance();
+    $CI->load->model('Key_model');
+    $CI->load->model('Email_queue_model');
+    $CI->Key_model->get_device_token_details();
+    $devices = $CI->Key_model->get_device_token_details();
+    $data['title'] = $post_title;
+    $data['description'] = substr($post_description, 0, 400);
+    foreach ($devices as $device)
+    {
+        $token_details['to'] = $device->device_token;
+        $token_details['message'] = json_encode($data);
+        $token_details['status'] = 'pending';
+        $token_details['date'] = get_current_datetime();
+        $CI->db->insert('email_queue', $token_details);
+    }
+    
+}
+
+/**
+ * Function to send the Notification message
+ * 
+ * @param type $message
+ * @param type $id
+ * @return boolean
+ */
+function send_gcm($message, $id)
+{
+    $CI = & get_instance();
+    $firebase_app_id = $CI->config->item('firebase_app_id');
+    $url = 'https://fcm.googleapis.com/fcm/send';
+    $fields = array(
+        'to' => $id,
+        'data' => $message
+    );
+    $fields = json_encode($fields);
+    print_r($fields);
+    exit;
+
+    $headers = array(
+        'Authorization: key=' . $firebase_app_id,
+        'Content-Type: application/json'
+    );
+    
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+    
+    /**
+     * Comment out in the production server.
+     * For Local, please enable
+     */
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+    /**
+     * 
+     */
+    $result = curl_exec($ch);
+   
+    if(curl_error($ch))
+    {
+        return false;
+    }
+    curl_close($ch);
+    return $result;
+    
+}

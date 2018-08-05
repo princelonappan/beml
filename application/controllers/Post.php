@@ -119,6 +119,8 @@ class Post extends Front_Controller
             $data['is_share'] = $can_share;
             $data['user_id'] = get_logged_user_id();
             $this->Post_model->insert_post($data);
+            //Sending the notification to devices.
+            insert_notification($title, $body);
             $this->session->set_flashdata('message', 'Post saved');
             redirect('/post/create');
             

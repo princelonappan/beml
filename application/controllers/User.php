@@ -70,7 +70,6 @@ class User extends Front_Controller
     
     public function update_details() 
     {
-        print_r($_POST);
         $user_id = $this->input->post('user_id');
         $can_post_manage = $this->input->post('can_post_manage');
         $status = $this->input->post('status');

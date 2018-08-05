@@ -21,3 +21,4 @@ $config['image_size_in_mb'] = 5;
 $config['video_size_in_mb'] = 50;
 $config['image_extensions_libaray_format'] = 'gif|jpg|png|jepg';
 $config['video_extensions_libaray_format'] = 'mp3|mp4|wma';
+$config['firebase_app_id'] = 'AAAAuvUI8F0:APA91bFXjmBKSRVCZbZfN5P7gA4AfEGRAkeoUCVo7-SKbrjmb0GHWNXt0HmRMdD4vpHy9VA4PMnxhonHGR_dv1JyM3Hge8ZBGvRxQKew1VDFFTSi415rLQtG_s6Dy6jZT-isgFpnP1FpUOXvFnsHhgzAHpy33ZMw3A';

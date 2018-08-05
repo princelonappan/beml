@@ -355,8 +355,6 @@ function send_gcm($message, $id)
         'data' => $message
     );
     $fields = json_encode($fields);
-    print_r($fields);
-    exit;
 
     $headers = array(
         'Authorization: key=' . $firebase_app_id,

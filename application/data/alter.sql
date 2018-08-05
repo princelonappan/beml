@@ -74,3 +74,37 @@ ALTER TABLE `post_comments` CHANGE `status` `status` TINYINT(2) NOT NULL DEFAULT
 
 ALTER TABLE `post` ADD `pending_review_count` TINYINT(3) NOT NULL DEFAULT '0' AFTER `comment_count`;
 ALTER TABLE `api_keys` ADD `device_token` TEXT NULL AFTER `key`;
+
+--
+-- Table structure for table `email_queue`
+--
+
+CREATE TABLE `email_queue` (
+  `id` int(11) NOT NULL,
+  `to` varchar(255) NOT NULL,
+  `message` text NOT NULL,
+  `status` enum('pending','sending','sent','failed') DEFAULT NULL,
+  `date` datetime DEFAULT NULL,
+  `headers` text,
+  `response` text
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `email_queue`
+--
+ALTER TABLE `email_queue`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `email_queue`
+--
+ALTER TABLE `email_queue`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;

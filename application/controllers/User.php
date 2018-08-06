@@ -19,6 +19,7 @@ class User extends Front_Controller
         if ($this->session->userdata('user')['admin_role'] == $this->config->item('super_admin_role') || 
                 $this->session->userdata('user')['admin_role'] == $this->config->item('user_admin_role'))
         {
+            $data['user_id'] = get_logged_user_id();
             $data['user_details'] = $this->User_model->get_all_users();
             $this->template->build('/user/user_list', $data);
         }
@@ -46,7 +47,8 @@ class User extends Front_Controller
         if ($this->session->userdata('user')['admin_role'] == $this->config->item('super_admin_role') || 
                 $this->session->userdata('user')['admin_role'] == $this->config->item('user_admin_role'))
         {
-            if(isset($id) && !empty($id)) 
+            $user_id = get_logged_user_id();
+            if(isset($id) && !empty($id) && $user_id != $id) 
             {
                 $user_details = $this->User_model->get_user_by_id($id);
                 if(isset($user_details) && !empty($user_details[0]))
@@ -71,7 +73,7 @@ class User extends Front_Controller
     public function update_details() 
     {
         $user_id = $this->input->post('user_id');
-        $can_post_manage = $this->input->post('can_post_manage');
+        $can_post_manage = 1;
         $status = $this->input->post('status');
         $is_admin_user = $this->input->post('is_admin_user');
         $admin_role = $this->input->post('admin_role');
@@ -112,7 +114,7 @@ class User extends Front_Controller
                 $user_details['date_of_birth'] = $date_of_birth;
                 $user_details['date_of_join'] = $date_of_join;
                 $user_details['created_date'] = $user_details['modified_date'] = get_current_datetime();
-                $user_details['is_comment_share_post'] = $_POST['can_post_manage'];
+                $user_details['is_comment_share_post'] = 1;
                 if($_POST['is_admin_user'] == $this->config->item('is_admin_user')) 
                 {
                     $user_details['is_admin_user'] = $_POST['is_admin_user'];

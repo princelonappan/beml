@@ -54,9 +54,6 @@
                                     <th></th>
                                     <th>Employee Id</th>
                                     <th>Employee Name</th>
-                                    <th>Date of Birth</th>
-                                    <th>Date of Join</th>
-                                    <th>Email</th>
                                     <th>Is Admin User?</th>
                                     <th>User Role</th>
                                     <th>Status</th>
@@ -78,9 +75,6 @@
                                         <td>
                                             <a href="#"><?php echo $user->name; ?></a>
                                         </td>
-                                        <td><?php echo $user->date_of_birth; ?></td>
-                                        <td ><?php echo $user->date_of_join; ?></td>
-                                        <td ><?php echo $user->email; ?></td>
                                         <td ><?php echo $user->is_admin_user == '1' ? 'Yes': 'No'; ?></td>
                                         <td>
                                             <?php
@@ -101,9 +95,11 @@
                                         <td><?php echo $user->status == 1 ? 'Active' : 'Deactive'; ?></td>
                                         <td class="td-actions">
                                             <div class="hidden-phone visible-desktop action-buttons">
+                                                <?php if($user->id != $user_id) { ?>
                                                 <a href="<?php echo 'user/edit/' . $user->id; ?>" class="green"  data-rel="tooltip" title="Edit Employee details">
                                                     <i class="icon-pencil bigger-130"></i>
                                                 </a>
+                                                <?php } ?>
                                             </div>
                                         </td>
                                     </tr>
@@ -138,9 +134,8 @@ else
                 {"bSortable": true},
                 {"bSortable": true},
                 {"bSortable": true},
-                {"bSortable": true},
-                {"bSortable": true},
-                {"bSortable": true},
+                {"bSortable": false},
+                {"bSortable": false},
                 {"bSortable": false}
             ]});
 

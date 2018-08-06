@@ -103,24 +103,31 @@ class User extends REST_Controller
             if (isset($user_details['0']) && !empty($user_details['0']))
             {
                 $user = $user_details['0'];
-                $password_md5 = $user->password;
-                if ($password_md5 == md5($password))
+                if ($user->status == 1)
                 {
-                    $update_data['user_id'] = $user->id;
-                    $this->Key_model->update_key_details($key, $update_data);
-
-                    if ($user->user_profile_image && !empty($user->user_profile_image))
+                    $password_md5 = $user->password;
+                    if ($password_md5 == md5($password))
                     {
-                        $user->user_profile_image = base_url() . 'uploads/user_profile_images/' . $user->user_profile_image;
+                        $update_data['user_id'] = $user->id;
+                        $this->Key_model->update_key_details($key, $update_data);
+
+                        if ($user->user_profile_image && !empty($user->user_profile_image))
+                        {
+                            $user->user_profile_image = base_url() . 'uploads/user_profile_images/' . $user->user_profile_image;
+                        }
+                        else
+                            unset($user->user_profile_image);
+
+                        $this->response(array('result_code' => 200, 'result_title' => 'Success', 'user' => $user));
                     }
                     else
-                        unset($user->user_profile_image);
-
-                    $this->response(array('result_code' => 200, 'result_title' => 'Success', 'user' => $user));
+                    {
+                        $this->response(array('result_code' => 400, 'result_title' => 'Error', 'result_string' => 'Invalid employee details!'));
+                    }
                 }
                 else
                 {
-                    $this->response(array('result_code' => 400, 'result_title' => 'Error', 'result_string' => 'Invalid employee details!'));
+                    $this->response(array('result_code' => 400, 'result_title' => 'Error', 'result_string' => 'Your account has been deacivated.'));
                 }
             }
             else

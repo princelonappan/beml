@@ -67,22 +67,6 @@
                             </div>
                         </div>
                         
-                        <div class="control-group">
-                            <label class="control-label" for="email">Can Comment/Share Posts through App?</label>
-                            <div class="controls">
-                                <span class="span12">
-                                    <label class="blue" style="display: inline;">
-                                        <input name="can_post_manage" value="1" type="radio" checked="checked" />
-                                        <span class="lbl">Yes</span>
-                                    </label>
-
-                                    <label class="blue" style="display: inline;padding-left: 5px;">
-                                        <input name="can_post_manage" value="2" type="radio"  />
-                                        <span class="lbl">No</span>
-                                    </label>
-                                </span>
-                            </div>
-                        </div>
 
                         <div class="control-group">
                             <label class="control-label" for="email">Is Admin User?</label>

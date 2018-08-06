@@ -325,8 +325,8 @@ function insert_notification($post_title, $post_description)
     $CI->load->model('Email_queue_model');
     $CI->Key_model->get_device_token_details();
     $devices = $CI->Key_model->get_device_token_details();
-    $data['title'] = $post_title;
-    $data['description'] = substr($post_description, 0, 400);
+    $data['body'] = $post_title;
+    $data['title'] = substr($post_description, 0, 400);
     foreach ($devices as $device)
     {
         $token_details['to'] = $device->device_token;
@@ -352,7 +352,7 @@ function send_gcm($message, $id)
     $url = 'https://fcm.googleapis.com/fcm/send';
     $fields = array(
         'to' => $id,
-        'data' => $message
+        'notification' => $message
     );
     $fields = json_encode($fields);
 

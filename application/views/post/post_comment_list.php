@@ -37,12 +37,13 @@
                         <table id="sample-table-2" class="table table-striped table-bordered table-hover">
                             <thead>
                                 <tr>
-                                    <th></th>
+                                    <th>Post Comment ID</th>
                                     <th>Comment</th>
                                     <th>Employee Id</th>
                                     <th>Created By</th>
                                     <th>Status</th>
                                     <th>Created Date</th> 
+                                    <th></th>
                                     <th></th>
                                     <th></th>
                                 </tr>
@@ -57,18 +58,30 @@
                                     $status = $comment['post_comment_status'] == 1 ? 2 : 1;
                                     ?>
                                     <tr>
-                                        <td><?php echo $i; ?></td>
+                                        <td><?php echo $comment['post_comment_id']; ?></td>
                                         <td><?php echo $comment['comment']; ?></td> 
                                         <td><?php echo $comment['employee_id']; ?></td> 
                                         <td><?php echo $comment['name']; ?></td>
-                                        <td><?php echo $comment['post_comment_status'] == 1 ? "Active" : "Deactive"; ?></td>
+                                        <td><?php 
+                                        if($comment['post_comment_status'] == 1) {
+                                            echo "Active";
+                                        } else if($comment['post_comment_status'] == 2) {
+                                             echo "Deactive";
+                                        } else {
+                                            echo "Ignore";
+                                        }
+                                        
+                                         ?></td>
                                         <td><?php echo $comment['post_commented_date']; ?></td>
 
                                         <td class="td-actions">
-                                            <a href="" onclick="change_status_post(<?php echo $comment['post_comment_id']; ?>, 1, <?php echo $comment['post_id'];?>)">Approve</a>                                                                                   
+                                            <a href="/post/change_comment_status/<?php echo $comment['post_comment_id']; ?>/1/<?php echo $comment['post_id'];?>" >Approve</a>                                                                                   
                                         </td>
                                         <td class="td-actions">
-                                             <a href="" onclick="change_status_post(<?php echo $comment['post_comment_id']; ?>, 3, <?php echo $comment['post_id'];?>)">Ignore</a>
+                                            <a href="/post/change_comment_status/<?php echo $comment['post_comment_id']; ?>/2/<?php echo $comment['post_id'];?>">Deactive</a>                                                                                   
+                                        </td>
+                                        <td class="td-actions">
+                                             <a href="/post/change_comment_status/<?php echo $comment['post_comment_id']; ?>/3/<?php echo $comment['post_id'];?>">Ignore</a>
                                         </td>
                                     </tr>
                         <?php } ?>
@@ -98,16 +111,8 @@ else
 <script type="text/javascript">
     $(function () {
         var oTable1 = $('#sample-table-2').dataTable({
-            "aoColumns": [
-                {"bSortable": false},
-                {"bSortable": true},
-                {"bSortable": false},
-                {"bSortable": false},
-                {"bSortable": false},
-                {"bSortable": false},
-                {"bSortable": false},
-                {"bSortable": false}
-            ]});
+            aaSorting: [[0, 'desc']]
+            });
 
 
         $('table th input:checkbox').on('click', function () {

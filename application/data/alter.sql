@@ -108,3 +108,5 @@ ALTER TABLE `email_queue`
 --
 ALTER TABLE `email_queue`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `post` CHANGE `title` `title` TEXT CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;

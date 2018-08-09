@@ -37,7 +37,7 @@
                         <table id="sample-table-2" class="table table-striped table-bordered table-hover">
                             <thead>
                                 <tr>
-                                    <th></th>
+                                    <th>Post Id</th>
                                     <th>Title</th>
                                     <th>Body</th>
                                     <th>Category</th>
@@ -54,7 +54,7 @@
                                 {
                                     ?>
                                     <tr>
-                                        <td><?php echo $i; ?></td>
+                                        <td><?php echo $post['post_id']; ?></td>
                                         <td><?php echo $post['title']; ?></td>                  
                                         <td><?php echo $post['body']; ?></td>
                                         <td><?php echo $post['category_name']; ?></td>
@@ -108,15 +108,8 @@ else
 <script type="text/javascript">
     $(function () {
         var oTable1 = $('#sample-table-2').dataTable({
-            "aoColumns": [
-                {"bSortable": false},
-                {"bSortable": false},
-                {"bSortable": false},
-                {"bSortable": false},
-                {"bSortable": true},
-                {"bSortable": false},
-                {"bSortable": false}
-            ]});
+            aaSorting: [[0, 'desc']]
+            });
 
 
         $('table th input:checkbox').on('click', function () {

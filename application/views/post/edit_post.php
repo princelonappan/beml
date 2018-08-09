@@ -50,7 +50,7 @@
                         <?php } ?>
                                             <div class="step-pane active" id="step1">
                                                 <div class="control-group">
-                                                    <label class="control-label" for="title">Title</label>
+                                                    <label class="control-label" for="title">Title (max 280 characters)</label>
                                                     <div class="controls">
                                                         <div class="span12">
                                                             <input type="text" value="<?php echo $post[0]['title'];?>" name="title" id="title" class="span6" required="required"/>
@@ -59,7 +59,7 @@
                                                 </div>
                                                 <input type="hidden" id="post_id" name="post_id" value="<?php echo $post[0]['post_id']; ?>"/>
                                                 <div class="control-group">
-                                                    <label class="control-label" for="body">Body</label>
+                                                    <label class="control-label" for="body">Body (max 2000 characters)</label>
                                                     <div class="controls">
                                                         <div class="span12">
                                                             
@@ -305,10 +305,12 @@
             focusInvalid: false,
             rules: {
                 title: {
-                    required: true
+                    required: true,
+                    maxlength: 280
                 },
                 body: {
-                    required: true
+                    required: true,
+                    maxlength: 2000
                 },
                 category: {
                     required: true

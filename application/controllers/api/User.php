@@ -213,7 +213,11 @@ class User extends REST_Controller
                         }
                         else
                             unset($user->user_profile_image);
+                        //Updating the user registered status and 
+                        //date of birth and join
                         $user_update_data['is_registered'] = 1;
+                        $user_update_data['date_of_birth'] = NULL;
+                        $user_update_data['date_of_join'] = NULL;
                         $user_update_data['mobile_number'] = $mobile_number;
                     }
                     

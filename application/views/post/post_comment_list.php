@@ -75,13 +75,13 @@
                                         <td><?php echo $comment['post_commented_date']; ?></td>
 
                                         <td class="td-actions">
-                                            <a href="/post/change_comment_status/<?php echo $comment['post_comment_id']; ?>/1/<?php echo $comment['post_id'];?>" >Approve</a>                                                                                   
+                                            <a href="post/change_comment_status/<?php echo $comment['post_comment_id']; ?>/1/<?php echo $comment['post_id'];?>" >Approve</a>                                                                                   
                                         </td>
                                         <td class="td-actions">
-                                            <a href="/post/change_comment_status/<?php echo $comment['post_comment_id']; ?>/2/<?php echo $comment['post_id'];?>">Deactive</a>                                                                                   
+                                            <a href="post/change_comment_status/<?php echo $comment['post_comment_id']; ?>/2/<?php echo $comment['post_id'];?>">Deactive</a>                                                                                   
                                         </td>
                                         <td class="td-actions">
-                                             <a href="/post/change_comment_status/<?php echo $comment['post_comment_id']; ?>/3/<?php echo $comment['post_id'];?>">Ignore</a>
+                                             <a href="post/change_comment_status/<?php echo $comment['post_comment_id']; ?>/3/<?php echo $comment['post_id'];?>">Ignore</a>
                                         </td>
                                     </tr>
                         <?php } ?>

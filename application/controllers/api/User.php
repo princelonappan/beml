@@ -353,6 +353,9 @@ class User extends REST_Controller
                 {
                     $user->user_profile_image = base_url() . 'uploads/user_profile_images/' . $user->user_profile_image;
                 }
+                unset($user->password);
+                unset($user->reset_password_token);
+                unset($user->admin_role);
                 $this->response(array('result_code' => 200, 'result_title' => 'Success', 'user' => $user));
             }
             else

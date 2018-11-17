@@ -63,11 +63,11 @@
 
                                         <td class="td-actions">
                                             <div class=" action-buttons">
-                                                <a href="<?php echo 'post/post_view/' . $post['post_id']; ?>" onclick='' name='view_post' class="green view_post" id ="<?php echo $post['post_id']; ?>" data-rel="tooltip" title="View Post">
+                                                <a href="<?php echo base_url(). 'post/post_view/' . $post['post_id']; ?>" onclick='' name='view_post' class="green view_post" id ="<?php echo $post['post_id']; ?>" data-rel="tooltip" title="View Post">
                                                     <i class="icon-eye-open bigger-130"></i>
                                                 </a>
                                                 
-                                                <a href="<?php echo 'post/edit/' . $post['post_id']; ?>" onclick='' name='view_post' class="green view_post" id ="<?php echo $post['post_id']; ?>" data-rel="tooltip" title="Edit Post">
+                                                <a href="<?php echo base_url(). 'post/edit/' . $post['post_id']; ?>" onclick='' name='view_post' class="green view_post" id ="<?php echo $post['post_id']; ?>" data-rel="tooltip" title="Edit Post">
                                                     <i class="icon-pencil bigger-130"></i>
                                                 </a>
                                                 
@@ -75,7 +75,7 @@
                                                     <i class="icon-remove-sign bigger-130"></i>
                                                 </a>
                                                 
-                                                <a  href="<?php echo 'post/view_comments/' . $post['post_id']; ?>" name='view_post' class="green view_post" id ="<?php echo $post['post_id']; ?>" data-rel="tooltip" title="Display Comments">
+                                                <a  href="<?php echo base_url(). 'post/view_comments/' . $post['post_id']; ?>" name='view_post' class="green view_post" id ="<?php echo $post['post_id']; ?>" data-rel="tooltip" title="Display Comments">
                                                     <i class="icon-eye-open bigger-130"></i>
                                                 </a>
                                             </div>
@@ -144,7 +144,7 @@ else
            var strconfirm = confirm("Are you sure you want to delete?");
            if (strconfirm == true)
             {
-                window.location = "post/delete/"+id;
+                window.location = "<?php echo base_url();?>post/delete/"+id;
             }
        }
     var newwin = function()

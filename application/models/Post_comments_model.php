@@ -30,7 +30,7 @@ Class Post_comments_model extends CI_Model
         $this->db->join('users as u','post_comments.user_id = u.id');
         $this->db->where('post_comments.post_id', $post_id);
         $this->db->where('post_comments.status', 1);
-        $this->db->order_by("post_comments.created_date", "desc"); 
+        $this->db->order_by("post_comments.id", "desc"); 
         $this->db->limit($pagination_limit, $limit);
         $query = $this->db->get();
         return $query->result_array();

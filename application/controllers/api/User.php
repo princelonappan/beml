@@ -342,12 +342,17 @@ class User extends REST_Controller
 
     public function get_user_get()
     {
-        $user_id = $this->get('user_id');
+        $user_id = $this->get('employee_id');
         if (!empty($user_id))
         {
-            $user = $this->Pari_users_model->get_user_by_id($user_id);
+            $user = $this->User_model->get_user_by_employee_id($user_id);
             if (isset($user['0']) && !empty($user['0']))
             {
+                $user = $user['0'];
+                if ($user->user_profile_image && !empty($user->user_profile_image))
+                {
+                    $user->user_profile_image = base_url() . 'uploads/user_profile_images/' . $user->user_profile_image;
+                }
                 $this->response(array('result_code' => 200, 'result_title' => 'Success', 'user' => $user));
             }
             else
